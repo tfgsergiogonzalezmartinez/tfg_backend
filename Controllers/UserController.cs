@@ -51,7 +51,7 @@ namespace backend_tfg.Controllers
             {
                 return BadRequest(dato.Mensaje);
             }
-            return Ok(dato);
+            return Ok(dato.Valor);
         }
 
 

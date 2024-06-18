@@ -14,6 +14,7 @@ namespace backend_tfg.dto.UserDto
         public string Apellido1 { get; set; }
         public string Apellido2 { get; set; }
         public string Rol { get; set; }
+        public DateTime FechaNacimiento { get; set; }
         
         public UserGetDTO() : base()
         {
@@ -26,6 +27,7 @@ namespace backend_tfg.dto.UserDto
             Apellido1 = usuario.Apellido1;
             Apellido2 = usuario.Apellido2;
             Rol = usuario.Rol;
+            FechaNacimiento = usuario.FechaNacimiento;
         }
     }
     

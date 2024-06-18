@@ -63,7 +63,7 @@ namespace backend_tfg.repositorios
 
             var usuario = await _usuariosCollection.Find<User>(u => u.Email == usuarioLoginDTO.Email).FirstOrDefaultAsync();
 
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(usuarioLoginDTO.Password, usuario.Password))
+            if (usuario == null || !BCrypt.Net.BCrypt.Verify(usuarioLoginDTO.Password, usuario.hashedPassword))
             {
                 return new RItem<UserLoginGetDto>(null)
                 {
@@ -76,7 +76,7 @@ namespace backend_tfg.repositorios
             string token = GenerateJSONWebToken(usuario);
             UserLoginGetDto userLoginGetDto = new UserLoginGetDto(usuario);
             userLoginGetDto.Token = token;
-            
+
             return new RItem<UserLoginGetDto>(userLoginGetDto)
             {
                 Mensaje = "Inicio de sesión exitoso",
@@ -84,19 +84,19 @@ namespace backend_tfg.repositorios
             };
         }
 
-                public async Task<RItem<User>> Register(UserCreateDto usuarioCreaDTO)
+        public async Task<RItem<UserLoginGetDto>> Register(UserCreateDto usuarioCreaDTO)
         {
             if (!IsValidEmail(usuarioCreaDTO.Email))
             {
-                return new RItem<User>(null)
-                { 
+                return new RItem<UserLoginGetDto>(null)
+                {
                     Resultado = -1,
                     Mensaje = "Email no válido"
                 };
             }
             if (!IsValidPassword(usuarioCreaDTO.Password))
             {
-                return new RItem<User>(null)
+                return new RItem<UserLoginGetDto>(null)
                 {
                     Resultado = -2,
                     Mensaje = "Contraseña no valida, debe contener al menos una letra mayúscula y un número o un símbolo."
@@ -106,7 +106,7 @@ namespace backend_tfg.repositorios
             User usuario1 = await _usuariosCollection.Find<User>(u => u.Email == usuarioCreaDTO.Email).FirstOrDefaultAsync();
             if (usuario1 != null)
             {
-                return new RItem<User>(null)
+                return new RItem<UserLoginGetDto>(null)
                 {
                     Resultado = -1,
                     Mensaje = "Usuario ya existe"
@@ -122,10 +122,23 @@ namespace backend_tfg.repositorios
             usuario.Listable = true;
             usuario.Rol = "user";
             await _usuariosCollection.InsertOneAsync(usuario);
-            return new RItem<User>(usuario)
+            var user = await _usuariosCollection.Find<User>(u => u.Email == usuario.Email).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return new RItem<UserLoginGetDto>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Error al crear usuario"
+                };
+            }
+            //genero el token y lo devuelvo para que inicio sesion automaticamente.
+            var token = this.GenerateJSONWebToken(user);
+            UserLoginGetDto userLoginGetDto = new UserLoginGetDto(user);
+            userLoginGetDto.Token = token;
+            return new RItem<UserLoginGetDto>(userLoginGetDto)
             {
                 Resultado = 0,
-                Mensaje = "Usuario creado"
+                Mensaje = "Usuario creado exitosamente"
             };
         }
 
@@ -170,7 +183,7 @@ namespace backend_tfg.repositorios
         {
             if (password.Length < 6)
             {
-            return false;
+                return false;
             }
 
             bool hasUpperCase = false;
@@ -178,14 +191,14 @@ namespace backend_tfg.repositorios
 
             foreach (char c in password)
             {
-            if (char.IsUpper(c))
-            {
-                hasUpperCase = true;
-            }
-            else if (char.IsDigit(c) || char.IsSymbol(c) || char.IsPunctuation(c))
-            {
-                hasNumberOrSymbol = true;
-            }
+                if (char.IsUpper(c))
+                {
+                    hasUpperCase = true;
+                }
+                else if (char.IsDigit(c) || char.IsSymbol(c) || char.IsPunctuation(c))
+                {
+                    hasNumberOrSymbol = true;
+                }
             }
 
             return hasUpperCase && hasNumberOrSymbol;

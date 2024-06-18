@@ -14,23 +14,17 @@ namespace backend_tfg.dto.UserDto
         public string Nombre { get; set; }
         public string Apellido1 { get; set; }
         public string Apellido2 { get; set; }
+        public DateTime FechaNacimiento { get; set; }
 
         public UserCreateDto()
         {
-        }
-        public UserCreateDto(User usuario)
-        {
-            Email = usuario.Email;
-            Password = usuario.Password;
-            Nombre = usuario.Nombre;
-            Apellido1 = usuario.Apellido1;
-            Apellido2 = usuario.Apellido2;
         }
 
         public void toEntidad(User usuario)
         {
             usuario.Email = Email;
-            usuario.Password = Password;
+            usuario.hashedPassword = Password;
+            usuario.FechaNacimiento = FechaNacimiento;
             usuario.Nombre = Nombre;
             usuario.Apellido1 = Apellido1;
             usuario.Apellido2 = Apellido2;
