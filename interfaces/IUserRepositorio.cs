@@ -10,7 +10,7 @@ namespace backend_tfg.interfaces
     public interface IUserRepositorio : IBaseRepositorio<User>
     {
 
-        // Task<RItem<User>> Register(UserCreateDto usuarioCreaDto);
+        Task<RItem<User>> Register(UserCreateDto usuarioCreaDto);
         Task<RItem<UserLoginGetDto>> Login(UserLoginDTO usuarioLoginDTO);
         Task<RItem<User>> CambiarContraseña(User usuario);
 

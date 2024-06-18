@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\backend\\backend_tfg.csproj": {}
+    "C:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\tfg_backend\\backend_tfg.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\backend\\backend_tfg.csproj": {
+    "C:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\tfg_backend\\backend_tfg.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\backend\\backend_tfg.csproj",
+        "projectUniqueName": "C:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\tfg_backend\\backend_tfg.csproj",
         "projectName": "backend_tfg",
-        "projectPath": "c:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\backend\\backend_tfg.csproj",
+        "projectPath": "C:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\tfg_backend\\backend_tfg.csproj",
         "packagesPath": "C:\\Users\\Sergio\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\backend\\obj\\",
+        "outputPath": "C:\\Users\\Sergio\\Desktop\\TFG\\NewTFG\\tfg_backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Sergio\\AppData\\Roaming\\NuGet\\NuGet.Config"

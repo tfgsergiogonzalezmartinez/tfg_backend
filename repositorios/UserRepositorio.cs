@@ -84,6 +84,51 @@ namespace backend_tfg.repositorios
             };
         }
 
+                public async Task<RItem<User>> Register(UserCreateDto usuarioCreaDTO)
+        {
+            if (!IsValidEmail(usuarioCreaDTO.Email))
+            {
+                return new RItem<User>(null)
+                { 
+                    Resultado = -1,
+                    Mensaje = "Email no válido"
+                };
+            }
+            if (!IsValidPassword(usuarioCreaDTO.Password))
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -2,
+                    Mensaje = "Contraseña no valida, debe contener al menos una letra mayúscula y un número o un símbolo."
+                };
+            }
+
+            User usuario1 = await _usuariosCollection.Find<User>(u => u.Email == usuarioCreaDTO.Email).FirstOrDefaultAsync();
+            if (usuario1 != null)
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Usuario ya existe"
+                };
+            }
+            // Encrypt password before saving
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(usuarioCreaDTO.Password);
+
+            usuarioCreaDTO.Password = hashedPassword;
+            User usuario = new User();
+            usuarioCreaDTO.toEntidad(usuario);
+            usuario.FechaCreacion = System.DateTime.Now;
+            usuario.Listable = true;
+            usuario.Rol = "user";
+            await _usuariosCollection.InsertOneAsync(usuario);
+            return new RItem<User>(usuario)
+            {
+                Resultado = 0,
+                Mensaje = "Usuario creado"
+            };
+        }
+
 
 
 
