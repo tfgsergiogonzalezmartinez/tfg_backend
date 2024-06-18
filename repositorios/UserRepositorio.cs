@@ -112,7 +112,7 @@ namespace backend_tfg.repositorios
                     Mensaje = "Usuario ya existe"
                 };
             }
-            // Encrypt password before saving
+            // encripto la contraseña
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(usuarioCreaDTO.Password);
 
             usuarioCreaDTO.Password = hashedPassword;
@@ -151,14 +151,14 @@ namespace backend_tfg.repositorios
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT_SECRET"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            // Create the list of claims with user information
+            // Creo una lista de claims con la información del usuario
             var claims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, userInfo.Nombre),
-        new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
-        new Claim("DateOfJoining", userInfo.FechaCreacion?.ToString("yyyy-MM-dd")),
-        new Claim(ClaimTypes.Role, userInfo.Rol)
-    };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userInfo.Nombre),
+                new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
+                new Claim("DateOfJoining", userInfo.FechaCreacion?.ToString("yyyy-MM-dd")),
+                new Claim(ClaimTypes.Role, userInfo.Rol)
+            };
 
             var issuer = _config["JWT_ISSUER"];
             var audience = _config["JWT_AUDIENCE"];
@@ -170,7 +170,6 @@ namespace backend_tfg.repositorios
                 signingCredentials: credentials
             );
 
-            // Return the token
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
