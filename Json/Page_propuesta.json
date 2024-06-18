@@ -1,0 +1,86 @@
+[
+    {
+        "FechaCreacion": "2023-05-01T14:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": null,
+        "UsuarioCreacion": "user1",
+        "UsuarioModificacion": null,
+        "UserId": "user1",
+        "Title": "Página de Ejemplo 1",
+        "Description": "Esta es una descripción de la página de ejemplo 1.",
+        "Components": [
+            {
+
+                "Type": "texto",
+                "Settings": {
+                    "Position": {
+                        "ColStart": 1,
+                        "ColEnd": 3,
+                        "RowStart": 1,
+                        "RowEnd": 2
+                    },
+   
+                    "Style": {
+                        "Color": "#000000",
+                        "BackgroundColor": "#ffffff",
+                        "FontSize": "14px",
+                        "FontFamily": "Arial",
+                        "TextAlign": "left"
+                    },
+                    "Content": "Esto es un componente de texto."
+                }
+            },
+            {
+
+                "Type": "imagen",
+                "Settings": {
+                    "Position": {
+                        "ColStart": 2,
+                        "ColEnd": 4,
+                        "RowStart": 2,
+                        "RowEnd": 3
+                    },
+                    "Style": {
+                        "Color": null,
+                        "BackgroundColor": "#dddddd",
+                        "FontSize": null,
+                        "FontFamily": null,
+                        "TextAlign": null
+                    },
+                    "Content": "https://via.placeholder.com/300"
+                }
+            }
+        ]
+    },
+    {
+        "FechaCreacion": "2023-05-02T15:00:00Z",
+        "FechaModificacion": "2023-05-03T16:00:00Z",
+        "FechaUltimoAcceso": "2023-05-04T10:00:00Z",
+        "UsuarioCreacion": "user2",
+        "UsuarioModificacion": "user3",
+        "UserId": "user2",
+        "Title": "Página de Ejemplo 2",
+        "Description": "Esta es una descripción de la página de ejemplo 2.",
+        "Components": [
+            {
+                "Type": "video",
+                "Settings": {
+                    "Position": {
+                        "ColStart": 1,
+                        "ColEnd": 4,
+                        "RowStart": 1,
+                        "RowEnd": 2
+                    },
+                    "Style": {
+                        "Color": null,
+                        "BackgroundColor": "#cccccc",
+                        "FontSize": null,
+                        "FontFamily": null,
+                        "TextAlign": null
+                    },
+                    "Content": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                }
+            }
+        ]
+    }
+]

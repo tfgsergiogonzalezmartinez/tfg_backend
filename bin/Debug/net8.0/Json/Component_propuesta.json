@@ -1,0 +1,86 @@
+[
+    {
+        "FechaCreacion": "2023-05-01T14:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": null,
+        "UsuarioCreacion": "user1",
+        "UsuarioModificacion": null,
+        "Type": "texto",
+        "Settings": {
+            "Position": {
+                "ColStart": 1,
+                "ColEnd": 3,
+                "RowStart": 1,
+                "RowEnd": 2
+            },
+            "Size": {
+                "Width": 200,
+                "Height": 100
+            },
+            "Style": {
+                "Color": "#000000",
+                "BackgroundColor": "#ffffff",
+                "FontSize": "14px",
+                "FontFamily": "Arial",
+                "TextAlign": "left"
+            },
+            "Content": "Esto es un componente de texto."
+        }
+    },
+    {
+        "FechaCreacion": "2023-05-02T15:00:00Z",
+        "FechaModificacion": "2023-05-03T16:00:00Z",
+        "FechaUltimoAcceso": "2023-05-04T10:00:00Z",
+        "UsuarioCreacion": "user2",
+        "UsuarioModificacion": "user3",
+        "Type": "imagen",
+        "Settings": {
+            "Position": {
+                "ColStart": 2,
+                "ColEnd": 4,
+                "RowStart": 2,
+                "RowEnd": 3
+            },
+            "Size": {
+                "Width": 300,
+                "Height": 200
+            },
+            "Style": {
+                "Color": null,
+                "BackgroundColor": "#dddddd",
+                "FontSize": null,
+                "FontFamily": null,
+                "TextAlign": null
+            },
+            "Content": "https://via.placeholder.com/300"
+        }
+    },
+    {
+        "FechaCreacion": "2023-05-03T10:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": null,
+        "UsuarioCreacion": "user3",
+        "UsuarioModificacion": null,
+        "Type": "video",
+        "Settings": {
+            "Position": {
+                "ColStart": 1,
+                "ColEnd": 4,
+                "RowStart": 1,
+                "RowEnd": 2
+            },
+            "Size": {
+                "Width": 400,
+                "Height": 300
+            },
+            "Style": {
+                "Color": null,
+                "BackgroundColor": "#cccccc",
+                "FontSize": null,
+                "FontFamily": null,
+                "TextAlign": null
+            },
+            "Content": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+    }
+]

@@ -1,0 +1,44 @@
+[
+    {
+        "FechaCreacion": "2023-05-01T14:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": "2023-05-05T12:00:00Z",
+        "UsuarioCreacion": "admin",
+        "UsuarioModificacion": null,
+        "Nombre": "Juan",
+        "Apellido": "Pérez",
+        "Email": "juan.perez@example.com",
+        "Password": "hashedpassword1",
+        "Rol": "admin",
+        "Estado": "activo",
+        "Listable": true
+    },
+    {
+        "FechaCreacion": "2023-05-02T15:00:00Z",
+        "FechaModificacion": "2023-05-03T16:00:00Z",
+        "FechaUltimoAcceso": "2023-05-06T13:00:00Z",
+        "UsuarioCreacion": "admin",
+        "UsuarioModificacion": "admin",
+        "Nombre": "María",
+        "Apellido": "Gómez",
+        "Email": "maria.gomez@example.com",
+        "Password": "hashedpassword2",
+        "Rol": "usuario",
+        "Estado": "activo",
+        "Listable": true
+    },
+    {
+        "FechaCreacion": "2023-05-03T10:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": "2023-05-07T14:00:00Z",
+        "UsuarioCreacion": "admin",
+        "UsuarioModificacion": null,
+        "Nombre": "Carlos",
+        "Apellido": "López",
+        "Email": "carlos.lopez@example.com",
+        "Password": "hashedpassword3",
+        "Rol": "usuario",
+        "Estado": "inactivo",
+        "Listable": false
+    }
+]

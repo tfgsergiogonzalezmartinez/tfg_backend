@@ -1,0 +1,77 @@
+[
+    {
+        "FechaCreacion": "2023-05-01T14:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": null,
+        "UsuarioCreacion": "user1",
+        "UsuarioModificacion": null,
+        "UserIds": ["user1", "user2"],
+        "Messages": [
+            {
+                "UserId": "user1",
+                "Msg": "Hola, ¿cómo estás?",
+                "Fecha": "2023-05-01T14:05:00Z"
+            },
+            {
+                "UserId": "user2",
+                "Msg": "Bien, gracias. ¿Y tú?",
+                "Fecha": "2023-05-01T14:06:00Z"
+            },
+            {
+                "UserId": "user1",
+                "Msg": "Estoy bien, gracias por preguntar.",
+                "Fecha": "2023-05-01T14:07:00Z"
+            }
+        ]
+    },
+    {
+        "FechaCreacion": "2023-05-01T14:00:00Z",
+        "FechaModificacion": null,
+        "FechaUltimoAcceso": null,
+        "UsuarioCreacion": "user1",
+        "UsuarioModificacion": null,
+        "UserIds": ["user1", "user3"],
+        "Messages": [
+            {
+                "UserId": "user1",
+                "Msg": "Hola, ¿cómo estás?",
+                "Fecha": "2023-05-01T14:05:00Z"
+            },
+            {
+                "UserId": "user3",
+                "Msg": "Bien, gracias. ¿Y tú?",
+                "Fecha": "2023-05-01T14:06:00Z"
+            },
+            {
+                "UserId": "user1",
+                "Msg": "Estoy bien, gracias por preguntar User3.",
+                "Fecha": "2023-05-01T14:07:00Z"
+            }
+        ]
+    },
+    {
+        "FechaCreacion": "2023-05-02T15:00:00Z",
+        "FechaModificacion": "2023-05-03T16:00:00Z",
+        "FechaUltimoAcceso": "2023-05-04T10:00:00Z",
+        "UsuarioCreacion": "user3",
+        "UsuarioModificacion": "user4",
+        "UserIds": ["user3", "user4", "user5"],
+        "Messages": [
+            {
+                "UserId": "user3",
+                "Msg": "¿Quién tiene los documentos?",
+                "Fecha": "2023-05-02T15:05:00Z"
+            },
+            {
+                "UserId": "user5",
+                "Msg": "Yo los tengo.",
+                "Fecha": "2023-05-02T15:06:00Z"
+            },
+            {
+                "UserId": "user4",
+                "Msg": "¿Puedes enviármelos?",
+                "Fecha": "2023-05-02T15:07:00Z"
+            }
+        ]
+    }
+]
