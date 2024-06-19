@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend_tfg.dto.UserDto;
 using backend_tfg.modelos.usuario;
+using tfg_backend.dto.UserDto;
 
 namespace backend_tfg.interfaces
 {
@@ -12,7 +13,7 @@ namespace backend_tfg.interfaces
 
         Task<RItem<UserLoginGetDto>> Register(UserCreateDto usuarioCreaDto);
         Task<RItem<UserLoginGetDto>> Login(UserLoginDTO usuarioLoginDTO);
-        Task<RItem<User>> CambiarContraseña(User usuario);
+        Task<RItem<User>> CambiarPassword(UserCambiarPassword userCambiarPassword);
 
     }
 }

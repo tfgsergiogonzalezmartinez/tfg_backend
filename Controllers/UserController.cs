@@ -7,6 +7,7 @@ using backend_tfg.interfaces;
 using backend_tfg.modelos.usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using tfg_backend.dto.UserDto;
 
 namespace backend_tfg.Controllers
 {
@@ -63,6 +64,18 @@ namespace backend_tfg.Controllers
             {
                 return BadRequest(dato.Mensaje);
             }
+            return Ok(dato.Valor);
+
+        }
+        [HttpPost("CambiarPassword")]
+        public async Task<ActionResult> CambiarPassword(UserCambiarPassword userCambiarPassword)
+        {
+            var dato = await _usuarioRepositorio.CambiarPassword(userCambiarPassword);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+
             return Ok(dato.Valor);
 
         }

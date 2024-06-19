@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.RegularExpressions;
 using backend_tfg.dto.UserDto;
+using tfg_backend.dto.UserDto;
 
 namespace backend_tfg.repositorios
 {
@@ -24,23 +25,6 @@ namespace backend_tfg.repositorios
             this._config = config;
         }
 
-        public async Task<RItem<User>> CambiarContraseña(User usuario)
-        {
-            var usuarioActual = await _usuariosCollection.Find<User>(u => u.Id == usuario.Id).FirstOrDefaultAsync();
-            if (usuarioActual == null)
-            {
-                return new RItem<User>(null)
-                {
-                    Mensaje = "Usuario no encontrado",
-                    Resultado = -1
-                };
-            }
-            return new RItem<User>(null)
-            {
-                Mensaje = "Usuario no encontrado",
-                Resultado = -1
-            };
-        }
 
         public async Task<RItem<UserLoginGetDto>> Login(UserLoginDTO usuarioLoginDTO)
         {
@@ -142,6 +126,62 @@ namespace backend_tfg.repositorios
             };
         }
 
+        public async Task<RItem<User>> CambiarPassword(UserCambiarPassword userCambiarPassword)
+        {
+            var usuario = await _usuariosCollection.Find<User>(u => u.Email == userCambiarPassword.Email).FirstOrDefaultAsync();
+            if (usuario == null)
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Usuario no encontrado"
+                };
+            }
+            if (!BCrypt.Net.BCrypt.Verify(userCambiarPassword.PasswordAntigua, usuario.hashedPassword))
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Contraseña incorrecta"
+                };
+            }
+
+            if (userCambiarPassword.PasswordNueva1 != userCambiarPassword.PasswordNueva2)
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Las contraseñas no coinciden"
+                };
+            }
+
+
+
+
+
+
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCambiarPassword.PasswordNueva1);
+            usuario.hashedPassword = hashedPassword;
+
+            var resultado = await _usuariosCollection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
+
+            if (resultado.ModifiedCount == 0)
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Error al cambiar la contraseña"
+                };
+            }
+
+            return new RItem<User>(usuario)
+            {
+                Resultado = 0,
+                Mensaje = "Contraseña cambiada correctamente"
+            };
+
+        }
+
 
 
 
@@ -202,6 +242,8 @@ namespace backend_tfg.repositorios
 
             return hasUpperCase && hasNumberOrSymbol;
         }
+
+
     }
 }
 
