@@ -50,7 +50,7 @@ public class ContextoDB
                         Apellido1 = "Gonzalez",
                         Apellido2 = "Martinez",
                         Email = "admin@admin.es",
-                        hashedPassword = BCrypt.Net.BCrypt.HashPassword("Admin7"),
+                        HashedPassword = BCrypt.Net.BCrypt.HashPassword("Admin7"),
                         FechaNacimiento = DateTime.Now,
                         Rol = "admin",
                         Listable = true,

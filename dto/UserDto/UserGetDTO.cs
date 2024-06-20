@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace backend_tfg.dto.UserDto
 {
-    public class UserGetDTO : EntidadGetDto
+    public class UserGetDto : EntidadGetDto
     {
         public string Email { get; set; }
         public string Nombre { get; set; }
@@ -16,11 +16,11 @@ namespace backend_tfg.dto.UserDto
         public string Rol { get; set; }
         public DateTime FechaNacimiento { get; set; }
         
-        public UserGetDTO() : base()
+        public UserGetDto() : base()
         {
 
         }
-        public UserGetDTO(User usuario) : base(usuario)
+        public UserGetDto(User usuario) : base(usuario)
         {
             Email = usuario.Email;
             Nombre = usuario.Nombre;
@@ -29,6 +29,8 @@ namespace backend_tfg.dto.UserDto
             Rol = usuario.Rol;
             FechaNacimiento = usuario.FechaNacimiento;
         }
+
+
     }
     
 }

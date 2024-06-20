@@ -26,7 +26,7 @@ namespace backend_tfg.repositorios
         }
 
 
-        public async Task<RItem<UserLoginGetDto>> Login(UserLoginDTO usuarioLoginDTO)
+        public async Task<RItem<UserLoginGetDto>> Login(UserLoginDto usuarioLoginDTO)
         {
             if (!IsValidEmail(usuarioLoginDTO.Email))
             {
@@ -47,7 +47,7 @@ namespace backend_tfg.repositorios
 
             var usuario = await _usuariosCollection.Find<User>(u => u.Email == usuarioLoginDTO.Email).FirstOrDefaultAsync();
 
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(usuarioLoginDTO.Password, usuario.hashedPassword))
+            if (usuario == null || !BCrypt.Net.BCrypt.Verify(usuarioLoginDTO.Password, usuario.HashedPassword))
             {
                 return new RItem<UserLoginGetDto>(null)
                 {
@@ -137,7 +137,7 @@ namespace backend_tfg.repositorios
                     Mensaje = "Usuario no encontrado"
                 };
             }
-            if (!BCrypt.Net.BCrypt.Verify(userCambiarPassword.PasswordAntigua, usuario.hashedPassword))
+            if (!BCrypt.Net.BCrypt.Verify(userCambiarPassword.PasswordAntigua, usuario.HashedPassword))
             {
                 return new RItem<User>(null)
                 {
@@ -161,7 +161,7 @@ namespace backend_tfg.repositorios
 
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCambiarPassword.PasswordNueva1);
-            usuario.hashedPassword = hashedPassword;
+            usuario.HashedPassword = hashedPassword;
 
             var resultado = await _usuariosCollection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
 
@@ -180,6 +180,29 @@ namespace backend_tfg.repositorios
                 Mensaje = "Contraseña cambiada correctamente"
             };
 
+        }
+        public async Task<RItem<User>> ModificarRol(UserModificarRolDto userModificarRolDto){
+            var usuario = await _usuariosCollection.Find<User>(u => u.Email == userModificarRolDto.Email).FirstOrDefaultAsync();
+            if (usuario == null)
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Usuario no encontrado"
+                };
+            }
+            usuario.Rol = userModificarRolDto.Rol;
+            var resultado = await _usuariosCollection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
+            if (resultado.ModifiedCount == 0)
+            {
+                return new RItem<User>(null)
+                {
+                    Resultado = -1,
+                    Mensaje = "Error al cambiar el rol"
+                };
+            }
+            return new RItem<User>(usuario);
+    
         }
 
 

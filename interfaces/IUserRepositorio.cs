@@ -12,8 +12,9 @@ namespace backend_tfg.interfaces
     {
 
         Task<RItem<UserLoginGetDto>> Register(UserCreateDto usuarioCreaDto);
-        Task<RItem<UserLoginGetDto>> Login(UserLoginDTO usuarioLoginDTO);
+        Task<RItem<UserLoginGetDto>> Login(UserLoginDto usuarioLoginDto);
         Task<RItem<User>> CambiarPassword(UserCambiarPassword userCambiarPassword);
+        Task<RItem<User>> ModificarRol(UserModificarRolDto userModificarRolDto);
 
     }
 }
