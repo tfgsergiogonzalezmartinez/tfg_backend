@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace tfg_backend.dto.UserDto
 {
-    public class UserModificarRolDto
+    public class UserCambiarRolDto
     {
-        public string Email { get; set; }
-        public string Rol { get; set; }
+        public string Email { get; set; } = "";
+        public string Rol { get; set; } = "";
+        
     }
 }

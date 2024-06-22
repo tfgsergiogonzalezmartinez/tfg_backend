@@ -180,3 +180,5 @@ c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\obj\Debug\net8.0\refint\backend_t
 c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\obj\Debug\net8.0\backend_tfg.pdb
 c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\obj\Debug\net8.0\backend_tfg.genruntimeconfig.cache
 c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\obj\Debug\net8.0\ref\backend_tfg.dll
+c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\Newtonsoft.Json.dll
+c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll

@@ -28,9 +28,6 @@ namespace backend_tfg.Controllers
         public async Task<ActionResult<List<User>>> GetAll()
         {
             var datos = await _usuarioRepositorio.GetAll();
-            if (datos.Resultado != 0){
-                return BadRequest(datos.Mensaje);
-            }
             return Ok(datos.Lista);
         }
 
@@ -71,7 +68,7 @@ namespace backend_tfg.Controllers
 
         }
         [HttpPost("CambiarPassword")]
-        public async Task<ActionResult> CambiarPassword(UserCambiarPassword userCambiarPassword)
+        public async Task<ActionResult> CambiarPassword(UserCambiarPasswordDto userCambiarPassword)
         {
             var dato = await _usuarioRepositorio.CambiarPassword(userCambiarPassword);
             if (dato.Resultado != 0)
@@ -82,17 +79,17 @@ namespace backend_tfg.Controllers
             return Ok(dato.Valor);
 
         }
-
-
         [HttpPost("ModificarRol")]
-        public async Task<ActionResult<User>> Put(UserModificarRolDto userModificarRolDto)
+        public async Task<ActionResult> ModificarRol(UserCambiarRolDto userCambiarRolDto)
         {
-            var dato = await _usuarioRepositorio.ModificarRol(userModificarRolDto);
+            var dato = await _usuarioRepositorio.ModificarRol(userCambiarRolDto);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
             }
+
             return Ok(dato.Valor);
+
         }
     }
 }

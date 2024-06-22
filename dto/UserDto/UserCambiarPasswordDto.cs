@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace tfg_backend.dto.UserDto
 {
-    public class UserCambiarPassword
+    public class UserCambiarPasswordDto
     {
         public string Email { get; set; } = "";
         public string PasswordAntigua { get; set; } = "";

@@ -126,7 +126,7 @@ namespace backend_tfg.repositorios
             };
         }
 
-        public async Task<RItem<User>> CambiarPassword(UserCambiarPassword userCambiarPassword)
+        public async Task<RItem<User>> CambiarPassword(UserCambiarPasswordDto userCambiarPassword)
         {
             var usuario = await _usuariosCollection.Find<User>(u => u.Email == userCambiarPassword.Email).FirstOrDefaultAsync();
             if (usuario == null)
@@ -181,7 +181,7 @@ namespace backend_tfg.repositorios
             };
 
         }
-        public async Task<RItem<User>> ModificarRol(UserModificarRolDto userModificarRolDto){
+        public async Task<RItem<User>> ModificarRol(UserCambiarRolDto userModificarRolDto){
             var usuario = await _usuariosCollection.Find<User>(u => u.Email == userModificarRolDto.Email).FirstOrDefaultAsync();
             if (usuario == null)
             {
