@@ -89,7 +89,56 @@ namespace backend_tfg.Controllers
             }
 
             return Ok(dato.Valor);
+        }
+        [HttpPost("{userId}/subirBase64")]
+        public async Task<IActionResult> SubirFotoBase64(string userId, [FromBody] ImagenDto imagenDto)
+        {
+            if (string.IsNullOrEmpty(imagenDto.Imagen))
+                return BadRequest("No se subió ninguna imagen.");
 
+            var extension = ".jpg"; // Ajusta esto según tus necesidades
+            var rutaCarpeta = Path.Combine("data", userId);
+            if (!Directory.Exists(rutaCarpeta))
+            {
+                Directory.CreateDirectory(rutaCarpeta);
+            }
+
+            var rutaArchivo = Path.Combine(rutaCarpeta, "avatar" + extension);
+
+            var imageData = Convert.FromBase64String(imagenDto.Imagen.Split(',')[1]);
+            await System.IO.File.WriteAllBytesAsync(rutaArchivo, imageData);
+
+            return Ok(new { RutaArchivo = rutaArchivo });
+        }
+
+        [HttpGet("{userId}/fotoBase64")]
+        public IActionResult ObtenerFotoBase64(string userId)
+        {
+            var rutaCarpeta = Path.Combine("data", userId);
+            var rutaArchivoJpg = Path.Combine(rutaCarpeta, "avatar.jpg");
+            var rutaArchivoJpeg = Path.Combine(rutaCarpeta, "avatar.jpeg");
+            var rutaArchivoPng = Path.Combine(rutaCarpeta, "avatar.png");
+            var rutaArchivoGif = Path.Combine(rutaCarpeta, "avatar.gif");
+
+            string rutaArchivo = null;
+            if (System.IO.File.Exists(rutaArchivoJpg))
+                rutaArchivo = rutaArchivoJpg;
+            else if (System.IO.File.Exists(rutaArchivoJpeg))
+                rutaArchivo = rutaArchivoJpeg;
+            else if (System.IO.File.Exists(rutaArchivoPng))
+                rutaArchivo = rutaArchivoPng;
+            else if (System.IO.File.Exists(rutaArchivoGif))
+                rutaArchivo = rutaArchivoGif;
+
+            if (rutaArchivo == null)
+            {
+                return NotFound("Archivo no encontrado.");
+            }
+
+            var imageData = System.IO.File.ReadAllBytes(rutaArchivo);
+            var base64Imagen = $"data:image/{Path.GetExtension(rutaArchivo).TrimStart('.')};base64,{Convert.ToBase64String(imageData)}";
+
+            return Ok(new ImagenDto { Imagen = base64Imagen });
         }
     }
 }

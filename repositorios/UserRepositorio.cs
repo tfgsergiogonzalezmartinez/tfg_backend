@@ -105,7 +105,12 @@ namespace backend_tfg.repositorios
             usuario.FechaCreacion = System.DateTime.Now;
             usuario.Listable = true;
             usuario.Rol = "user";
+
+ 
+
             await _usuariosCollection.InsertOneAsync(usuario);
+
+
             var user = await _usuariosCollection.Find<User>(u => u.Email == usuario.Email).FirstOrDefaultAsync();
             if (user == null)
             {
@@ -115,6 +120,13 @@ namespace backend_tfg.repositorios
                     Mensaje = "Error al crear usuario"
                 };
             }
+            //Creo la carpeta del usuario, en /data, aqui estara su foto de perfil y sus archivos.
+            var rutaUsuario = Path.Combine("data", usuario.Id.ToString());
+            if (!Directory.Exists(rutaUsuario))
+            {
+                Directory.CreateDirectory(rutaUsuario);
+            }
+
             //genero el token y lo devuelvo para que inicio sesion automaticamente.
             var token = this.GenerateJSONWebToken(user);
             UserLoginGetDto userLoginGetDto = new UserLoginGetDto(user);
@@ -156,8 +168,7 @@ namespace backend_tfg.repositorios
             }
 
 
-
-
+         
 
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCambiarPassword.PasswordNueva1);
@@ -173,6 +184,7 @@ namespace backend_tfg.repositorios
                     Mensaje = "Error al cambiar la contraseña"
                 };
             }
+
 
             return new RItem<User>(usuario)
             {
