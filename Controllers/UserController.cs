@@ -90,27 +90,59 @@ namespace backend_tfg.Controllers
 
             return Ok(dato.Valor);
         }
+
         [HttpPost("{userId}/subirBase64")]
         public async Task<IActionResult> SubirFotoBase64(string userId, [FromBody] ImagenDto imagenDto)
         {
             if (string.IsNullOrEmpty(imagenDto.Imagen))
                 return BadRequest("No se subió ninguna imagen.");
 
-            var extension = ".jpg"; // Ajusta esto según tus necesidades
+            // Determinar el tipo de imagen desde la cadena base64
+            var dataUriHeader = imagenDto.Imagen.Split(',')[0];
+            var base64Data = imagenDto.Imagen.Split(',')[1];
+            string extension;
+
+            if (dataUriHeader.Contains("image/jpeg"))
+            {
+                extension = ".jpg";
+            }
+            else if (dataUriHeader.Contains("image/png"))
+            {
+                extension = ".png";
+            }
+            else if (dataUriHeader.Contains("image/gif"))
+            {
+                extension = ".gif";
+            }
+            else
+            {
+                return BadRequest("Formato de imagen no soportado.");
+            }
+
             var rutaCarpeta = Path.Combine("data", userId);
             if (!Directory.Exists(rutaCarpeta))
             {
                 Directory.CreateDirectory(rutaCarpeta);
             }
 
-            var rutaArchivo = Path.Combine(rutaCarpeta, "avatar" + extension);
+            // Eliminar cualquier archivo de avatar existente con extensiones válidas
+            var validExtensions = new[] { ".jpg", ".png", ".gif" };
+            foreach (var ext in validExtensions)
+            {
+                var existingAvatarPath = Path.Combine(rutaCarpeta, "avatar" + ext);
+                if (System.IO.File.Exists(existingAvatarPath))
+                {
+                    System.IO.File.Delete(existingAvatarPath);
+                }
+            }
 
-            var imageData = Convert.FromBase64String(imagenDto.Imagen.Split(',')[1]);
+            var rutaArchivo = Path.Combine(rutaCarpeta, "avatar" + extension);
+            var imageData = Convert.FromBase64String(base64Data);
             await System.IO.File.WriteAllBytesAsync(rutaArchivo, imageData);
 
             return Ok(new { RutaArchivo = rutaArchivo });
         }
-
+        
         [HttpGet("{userId}/fotoBase64")]
         public IActionResult ObtenerFotoBase64(string userId)
         {
