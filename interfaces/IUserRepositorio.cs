@@ -15,6 +15,7 @@ namespace backend_tfg.interfaces
         Task<RItem<UserLoginGetDto>> Login(UserLoginDto usuarioLoginDto);
         Task<RItem<User>> CambiarPassword(UserCambiarPasswordDto userCambiarPassword);
         Task<RItem<User>> ModificarRol(UserCambiarRolDto userModificarRolDto);
+        Task<RLista<User>> ObtenerUsuariosCoincidentes(string NombreUsuario);
 
     }
 }

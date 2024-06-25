@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.RegularExpressions;
 using backend_tfg.dto.UserDto;
 using tfg_backend.dto.UserDto;
+using MongoDB.Bson;
 
 namespace backend_tfg.repositorios
 {
@@ -276,6 +277,13 @@ namespace backend_tfg.repositorios
             }
 
             return hasUpperCase && hasNumberOrSymbol;
+        }
+
+        public async Task<RLista<User>> ObtenerUsuariosCoincidentes(string nombre){
+            // Crear una expresión regular para la búsqueda de coincidencias en el nombre.
+            var filter = Builders<User>.Filter.Regex("Nombre", new BsonRegularExpression(nombre, "i"));
+            var usuarios = await collection.Find(filter).Limit(5).ToListAsync();
+            return new RLista<User>(usuarios);
         }
 
 

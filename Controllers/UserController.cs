@@ -91,6 +91,18 @@ namespace backend_tfg.Controllers
             return Ok(dato.Valor);
         }
 
+        [HttpGet("ObtenerUsuariosCoincidentes/{nombre}")]
+        public async Task<ActionResult> ObtenerUsuariosCoincidentes(string nombre)
+        {
+            var dato = await _usuarioRepositorio.ObtenerUsuariosCoincidentes(nombre);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+
+            return Ok(dato.Lista);
+        }
+
         [HttpPost("{userId}/subirBase64")]
         public async Task<IActionResult> SubirFotoBase64(string userId, [FromBody] ImagenDto imagenDto)
         {
@@ -173,4 +185,6 @@ namespace backend_tfg.Controllers
             return Ok(new ImagenDto { Imagen = base64Imagen });
         }
     }
+
+    
 }
