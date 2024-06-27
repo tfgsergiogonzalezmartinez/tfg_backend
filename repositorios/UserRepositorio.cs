@@ -107,7 +107,6 @@ namespace backend_tfg.repositorios
             usuario.Listable = true;
             usuario.Rol = "user";
 
- 
 
             await _usuariosCollection.InsertOneAsync(usuario);
 
@@ -127,6 +126,9 @@ namespace backend_tfg.repositorios
             {
                 Directory.CreateDirectory(rutaUsuario);
             }
+            string avatarDefault = @"data/DefaultData/avatar.jpg";
+            System.IO.File.Copy(avatarDefault, rutaUsuario + "/avatar.jpg");
+
 
             //genero el token y lo devuelvo para que inicio sesion automaticamente.
             var token = this.GenerateJSONWebToken(user);

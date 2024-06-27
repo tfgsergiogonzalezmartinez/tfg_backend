@@ -184,6 +184,18 @@ namespace backend_tfg.Controllers
 
             return Ok(new ImagenDto { Imagen = base64Imagen });
         }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<User>> Get(string userId)
+        {
+            var dato = await _usuarioRepositorio.GetById(userId);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+
+            return Ok(dato.Valor);
+        }
     }
 
     
