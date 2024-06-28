@@ -11,5 +11,7 @@ namespace backend_tfg.interfaces
         Task<RItem<Chat>> getByUsers(List<string> userIds);
         Task<RLista<Chat>> getByUser(string userId);
         Task<RItem<Chat>> postMessageUsers (NewMessage newMsg);
+        Task<RItem<Chat>> LeerChat(string idUser1, string idUser2);
+        Task<RItem<int>> GetNumMensajesSinLeer(string idUser1, string idUser2);
     }
 }

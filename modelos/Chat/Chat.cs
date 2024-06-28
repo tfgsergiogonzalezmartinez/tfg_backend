@@ -10,5 +10,6 @@ namespace backend_tfg.modelos.EntidadChat
     {
         public List<string> UserIds { get; set; } = new List<string>();    // Listas de dos en dos, o posibilidad de crear grupos si hay mas de dos
         public List<Message> Mensajes { get; set; } = new List<Message>();
+        public bool Abierto { get; set; } = false;
     }
 }

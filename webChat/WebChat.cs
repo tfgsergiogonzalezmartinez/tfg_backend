@@ -65,7 +65,7 @@ public class WebChat : Hub
         if (UsuariosConectados.TryGetValue(userId, out var connectionId))
         {
             await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
-            await this._chatRepositorio.postMessageUsers(message);
+            var chat = await this._chatRepositorio.postMessageUsers(message);
         }
     }
 }

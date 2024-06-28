@@ -7,6 +7,7 @@ using backend_tfg.interfaces;
 using backend_tfg.modelos.EntidadChat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using tfg_backend.dto.ChatDto;
 
 namespace backend_tfg.Controllers
 {
@@ -48,6 +49,31 @@ namespace backend_tfg.Controllers
                 return BadRequest(dato.Mensaje);
             }
             return Ok(dato.Valor);
+        }
+
+        [HttpGet("LeerChat/{idUser1}/{idUser2}")]
+        public async Task<ActionResult<List<Chat>>> LeerChat(string idUser1,string idUser2)
+        {
+            var dato = await _chatRepositorio.LeerChat(idUser1, idUser2);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
+        }
+
+        [HttpGet("GetNumMensajesSinLeer/{idUser1}/{idUser2}")]
+        public async Task<ActionResult<List<Chat>>> GetNumMensajesSinLeer(string idUser1, string idUser2)
+        {
+            var dato = await _chatRepositorio.GetNumMensajesSinLeer(idUser1, idUser2);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            
+            return Ok(new MensajesNoLeidosDto{
+                MensajesNoLeidos = dato.Valor
+            });
         }
 
         [HttpPost]

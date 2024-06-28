@@ -282,7 +282,6 @@ namespace backend_tfg.repositorios
         }
 
         public async Task<RLista<User>> ObtenerUsuariosCoincidentes(string nombre){
-            // Crear una expresión regular para la búsqueda de coincidencias en el nombre.
             var filter = Builders<User>.Filter.Regex("Nombre", new BsonRegularExpression(nombre, "i"));
             var usuarios = await collection.Find(filter).Limit(5).ToListAsync();
             return new RLista<User>(usuarios);
