@@ -49,8 +49,8 @@ public class WebChat : Hub
 
     public async Task SendMessage(NewMessage message)
     {
-        Console.WriteLine($"SendMessage called with message: {message.mensaje}, userName: {message.usuario}, groupName: {message.grupo}");
-        await Clients.Group(message.grupo).SendAsync("NewMessage", message);
+        // Console.WriteLine($"SendMessage called with message: {message.mensaje}, userName: {message.usuario}, groupName: {message.grupo}");
+        // await Clients.Group(message.grupo).SendAsync("NewMessage", message);
 
         await SendDirectMessage(message.destinatario, message);
         // Notificar al destinatario del mensaje sobre el grupo de chat privado
@@ -65,8 +65,9 @@ public class WebChat : Hub
         if (UsuariosConectados.TryGetValue(userId, out var connectionId))
         {
             await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
+            await this._chatRepositorio.postMessageUsers(message);
         }
     }
 }
 
-public record NewMessage(string usuario, string mensaje, string grupo, string destinatario);
+public record NewMessage(string usuario, string mensaje, string destinatario);

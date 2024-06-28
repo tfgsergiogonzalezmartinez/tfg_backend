@@ -10,9 +10,7 @@ namespace backend_tfg.modelos.EntidadChat
     public class Message
     {
         public string UserId { get; set; } = string.Empty;
-
         public string Msg { get; set; } = string.Empty;
-
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime? Fecha { get; set; } = new DateTime(0);
     }

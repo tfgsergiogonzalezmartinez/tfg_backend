@@ -27,17 +27,29 @@ namespace backend_tfg.Controllers
             var datos = await _chatRepositorio.GetAll();
             return Ok(datos.Lista);
         }
-        [HttpGet("GetByUsers{userName}")]
-        public async Task<ActionResult<List<Chat>>> GetByUser(string userName)
+
+        [HttpGet("GetByUser/{idUser}")]
+        public async Task<ActionResult<List<Chat>>> GetByUser(string idUser)
         {
-            var dato = await _chatRepositorio.getByUsers(new List<string> {userName});
+            var dato = await _chatRepositorio.getByUser(idUser);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
             }
             return Ok(dato.Lista);
-
         }
+
+        [HttpGet("GetByUsers/{idsUsers}")]
+        public async Task<ActionResult<List<Chat>>> GetByUser(List<string> idsUsers)
+        {
+            var dato = await _chatRepositorio.getByUsers(idsUsers);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Chat>>> Create(ChatCreateDto chat)
         {
