@@ -109,7 +109,6 @@ namespace backend_tfg.Controllers
             if (string.IsNullOrEmpty(imagenDto.Imagen))
                 return BadRequest("No se subió ninguna imagen.");
 
-            // Determinar el tipo de imagen desde la cadena base64
             var dataUriHeader = imagenDto.Imagen.Split(',')[0];
             var base64Data = imagenDto.Imagen.Split(',')[1];
             string extension;
@@ -137,7 +136,6 @@ namespace backend_tfg.Controllers
                 Directory.CreateDirectory(rutaCarpeta);
             }
 
-            // Eliminar cualquier archivo de avatar existente con extensiones válidas
             var validExtensions = new[] { ".jpg", ".png", ".gif" };
             foreach (var ext in validExtensions)
             {

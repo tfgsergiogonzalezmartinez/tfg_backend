@@ -41,7 +41,7 @@ namespace backend_tfg.Controllers
         }
 
         [HttpGet("GetByUsers/{idsUsers}")]
-        public async Task<ActionResult<List<Chat>>> GetByUser(List<string> idsUsers)
+        public async Task<ActionResult<List<Chat>>> GetByUsers(List<string> idsUsers) //es una lista por si mas adelante quiero hacer chats de mas de 2 personas
         {
             var dato = await _chatRepositorio.getByUsers(idsUsers);
             if (dato.Resultado != 0)
@@ -51,10 +51,10 @@ namespace backend_tfg.Controllers
             return Ok(dato.Valor);
         }
 
-        [HttpGet("LeerChat/{idUser1}/{idUser2}")]
-        public async Task<ActionResult<List<Chat>>> LeerChat(string idUser1,string idUser2)
+        [HttpPost("LeerChat")]
+        public async Task<ActionResult<List<Chat>>> LeerChat(ChatUsuariosRequestDto chatUsuariosRequest)
         {
-            var dato = await _chatRepositorio.LeerChat(idUser1, idUser2);
+            var dato = await _chatRepositorio.LeerChat(chatUsuariosRequest.UserId1, chatUsuariosRequest.UserId2);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
@@ -74,6 +74,39 @@ namespace backend_tfg.Controllers
             return Ok(new MensajesNoLeidosDto{
                 MensajesNoLeidos = dato.Valor
             });
+        }
+        
+        [HttpGet("GetChatsAbiertos/{userId}")]
+        public async Task<ActionResult<List<Chat>>> GetChatsAbiertos(string userId)
+        {
+            var dato = await _chatRepositorio.GetChatsAbiertos(userId);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Lista);
+        }
+
+        [HttpPost("CerrarChat")]
+        public async Task<ActionResult<List<Chat>>> CerrarChat(ChatUsuariosRequestDto chatUsuariosRequest)
+        {
+            var dato = await _chatRepositorio.CerrarChat(chatUsuariosRequest.UserId1, chatUsuariosRequest.UserId2);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
+        }
+
+        [HttpPost("AbrirChat")]
+        public async Task<ActionResult<List<Chat>>> AbrirChat(ChatUsuariosRequestDto chatUsuariosRequest)
+        {
+            var dato = await _chatRepositorio.Abrirchat(chatUsuariosRequest.UserId1, chatUsuariosRequest.UserId2);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
         }
 
         [HttpPost]
