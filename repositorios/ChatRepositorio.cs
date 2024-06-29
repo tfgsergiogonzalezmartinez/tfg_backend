@@ -12,12 +12,12 @@ namespace backend_tfg.repositorios
 {
     public class ChatRepositorio : BaseRepositorio<Chat>, IChatRepositorio
     {
-        private readonly IMongoCollection<Chat> _chatCollection;
+        // private readonly IMongoCollection<Chat> _chatCollection;
         private IConfiguration _config;
 
         public ChatRepositorio(IConfiguration config, ContextoDB contexto) : base(contexto)
         {
-            this._chatCollection = contexto.GetCollection<Chat>();
+            // this.collection = contexto.GetCollection<Chat>();
             this._config = config;
         }
 
@@ -25,7 +25,7 @@ namespace backend_tfg.repositorios
         public async Task<RLista<Chat>> getByUser(string userId)
         {
             var filter = Builders<Chat>.Filter.Eq("UserIds", userId);
-            var datos = await _chatCollection.Find(filter).ToListAsync();
+            var datos = await collection.Find(filter).ToListAsync();
             if (datos is null){
                 return new RLista<Chat>(null){
                     Mensaje = "No se ha encontrado ningun chat con ese usuario",
@@ -42,7 +42,7 @@ namespace backend_tfg.repositorios
             Builders<Chat>.Filter.Size("UserIds", 2)
             );
         
-            var datos = await _chatCollection.Find(filter).FirstOrDefaultAsync();
+            var datos = await collection.Find(filter).FirstOrDefaultAsync();
             if (datos is null){
                 return new RItem<Chat>(null){
                     Mensaje = "No se ha encontrado ningun chat con esos usuarios",
@@ -79,7 +79,7 @@ namespace backend_tfg.repositorios
                 return creacion;
             }
 
-            var datos = this._chatCollection.UpdateOne(
+            var datos = this.collection.UpdateOne(
                 Builders<Chat>.Filter.Eq("Id", chat.Valor.Id),
                 Builders<Chat>.Update.Push("Mensajes", new Message{
                     UserId = newMsg.usuario,
@@ -101,7 +101,7 @@ namespace backend_tfg.repositorios
                     Resultado = -1
                 };
             }
-            var chatActualizado = this._chatCollection.UpdateOne(
+            var chatActualizado = this.collection.UpdateOne(
                 Builders<Chat>.Filter.Eq("Id", chat.Valor.Id),
                 Builders<Chat>.Update.Set("Mensajes.$[msg].Leido", true),
                 new UpdateOptions{
@@ -139,7 +139,7 @@ namespace backend_tfg.repositorios
                     }),
                 new BsonDocument("$count", "MensajesNoLeidos")
             };
-            var datos = await _chatCollection.Aggregate<BsonDocument>(filter).FirstOrDefaultAsync();
+            var datos = await collection.Aggregate<BsonDocument>(filter).FirstOrDefaultAsync();
             
             if (datos is null){
                 return new RItem<int>(0){
@@ -163,7 +163,7 @@ namespace backend_tfg.repositorios
                         { "Abierto", true }
                     })
             };
-            var datos = await _chatCollection.Aggregate<Chat>(filter).ToListAsync();
+            var datos = await collection.Aggregate<Chat>(filter).ToListAsync();
             if (datos is null){
                 return new RLista<Chat>(null){
                     Mensaje = "No se ha encontrado ningun chat con ese usuario",

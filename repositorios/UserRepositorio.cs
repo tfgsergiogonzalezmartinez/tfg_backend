@@ -17,12 +17,12 @@ namespace backend_tfg.repositorios
 {
     public class UserRepositorio : BaseRepositorio<User>, IUserRepositorio
     {
-        private readonly IMongoCollection<User> _usuariosCollection;
+        // private readonly IMongoCollection<User> _usuariosCollection;
         private IConfiguration _config;
 
         public UserRepositorio(IConfiguration config, ContextoDB contexto) : base(contexto)
         {
-            this._usuariosCollection = contexto.GetCollection<User>();
+            // this._usuariosCollection = contexto.GetCollection<User>();
             this._config = config;
         }
 
@@ -46,7 +46,7 @@ namespace backend_tfg.repositorios
                 };
             }
 
-            var usuario = await _usuariosCollection.Find<User>(u => u.Email == usuarioLoginDTO.Email).FirstOrDefaultAsync();
+            var usuario = await collection.Find<User>(u => u.Email == usuarioLoginDTO.Email).FirstOrDefaultAsync();
 
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(usuarioLoginDTO.Password, usuario.HashedPassword))
             {
@@ -57,7 +57,7 @@ namespace backend_tfg.repositorios
                 };
             }
             usuario.FechaUltimoAcceso = System.DateTime.Now;
-            await _usuariosCollection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
+            await collection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
             string token = GenerateJSONWebToken(usuario);
             UserLoginGetDto userLoginGetDto = new UserLoginGetDto(usuario);
             userLoginGetDto.Token = token;
@@ -88,7 +88,7 @@ namespace backend_tfg.repositorios
                 };
             }
 
-            User usuario1 = await _usuariosCollection.Find<User>(u => u.Email == usuarioCreaDTO.Email).FirstOrDefaultAsync();
+            User usuario1 = await collection.Find<User>(u => u.Email == usuarioCreaDTO.Email).FirstOrDefaultAsync();
             if (usuario1 != null)
             {
                 return new RItem<UserLoginGetDto>(null)
@@ -108,10 +108,10 @@ namespace backend_tfg.repositorios
             usuario.Rol = "user";
 
 
-            await _usuariosCollection.InsertOneAsync(usuario);
+            await collection.InsertOneAsync(usuario);
 
 
-            var user = await _usuariosCollection.Find<User>(u => u.Email == usuario.Email).FirstOrDefaultAsync();
+            var user = await collection.Find<User>(u => u.Email == usuario.Email).FirstOrDefaultAsync();
             if (user == null)
             {
                 return new RItem<UserLoginGetDto>(null)
@@ -143,7 +143,7 @@ namespace backend_tfg.repositorios
 
         public async Task<RItem<User>> CambiarPassword(UserCambiarPasswordDto userCambiarPassword)
         {
-            var usuario = await _usuariosCollection.Find<User>(u => u.Email == userCambiarPassword.Email).FirstOrDefaultAsync();
+            var usuario = await collection.Find<User>(u => u.Email == userCambiarPassword.Email).FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return new RItem<User>(null)
@@ -177,7 +177,7 @@ namespace backend_tfg.repositorios
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCambiarPassword.PasswordNueva1);
             usuario.HashedPassword = hashedPassword;
 
-            var resultado = await _usuariosCollection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
+            var resultado = await collection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
 
             if (resultado.ModifiedCount == 0)
             {
@@ -197,7 +197,7 @@ namespace backend_tfg.repositorios
 
         }
         public async Task<RItem<User>> ModificarRol(UserCambiarRolDto userModificarRolDto){
-            var usuario = await _usuariosCollection.Find<User>(u => u.Email == userModificarRolDto.Email).FirstOrDefaultAsync();
+            var usuario = await collection.Find<User>(u => u.Email == userModificarRolDto.Email).FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return new RItem<User>(null)
@@ -207,7 +207,7 @@ namespace backend_tfg.repositorios
                 };
             }
             usuario.Rol = userModificarRolDto.Rol;
-            var resultado = await _usuariosCollection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
+            var resultado = await collection.ReplaceOneAsync(u => u.Id == usuario.Id, usuario);
             if (resultado.ModifiedCount == 0)
             {
                 return new RItem<User>(null)
