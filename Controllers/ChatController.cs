@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using backend_tfg.dto.ChatDto;
 using backend_tfg.interfaces;
@@ -40,10 +41,10 @@ namespace backend_tfg.Controllers
             return Ok(dato.Lista);
         }
 
-        [HttpGet("GetByUsers/{idsUsers}")]
-        public async Task<ActionResult<List<Chat>>> GetByUsers(List<string> idsUsers) //es una lista por si mas adelante quiero hacer chats de mas de 2 personas
+        [HttpGet("GetByUsers/{userId1}/{userId2}")]
+        public async Task<ActionResult<List<Chat>>> GetByUsers(string userId1, string userId2) //es una lista por si mas adelante quiero hacer chats de mas de 2 personas
         {
-            var dato = await _chatRepositorio.getByUsers(idsUsers);
+            var dato = await _chatRepositorio.getByUsers([userId1, userId2]);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
