@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using backend_tfg.modelos.usuario;
 using MongoDB.Bson.Serialization.Serializers;
@@ -29,8 +30,13 @@ namespace backend_tfg.dto.UserDto
             Rol = usuario.Rol;
             FechaNacimiento = usuario.FechaNacimiento;
         }
-
-
+        public static List<UserGetDto> convListaDto(List<User> listaUsers){
+            List<UserGetDto> listaDto = new List<UserGetDto>();
+            foreach (User user in listaUsers){
+                listaDto.Add(new UserGetDto(user));
+            }
+            return listaDto;
+        }
     }
     
 }

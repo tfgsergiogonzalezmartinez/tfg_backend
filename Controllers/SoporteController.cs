@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend_tfg.modelos.EntidadChat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tfg_backend.dto.SoporteDto;
@@ -29,15 +30,15 @@ namespace backend_tfg.Controllers
             return Ok(datos.Lista);
         }
 
-        [HttpGet("GetPeticionesCerradas/{usuarioId}")]
-        public async Task<ActionResult<List<PeticionSoporte>>> GetPeticionesCerradas(string usuarioId)
+        [HttpGet("GetPeticionesCerradas")]
+        public async Task<ActionResult<List<PeticionSoporte>>> GetPeticionesCerradas()
         {
             var datos = await _soporteRepositorio.GetPeticionesCerradas();
             return Ok(datos.Lista);
         }
 
-        [HttpGet("GetPeticionesAbiertas/{usuarioId}")]
-        public async Task<ActionResult<List<PeticionSoporte>>> GetPeticionesAbiertas(string usuarioId)
+        [HttpGet("GetPeticionesAbiertas")]
+        public async Task<ActionResult<List<PeticionSoporte>>> GetPeticionesAbiertas()
         {
             var datos = await _soporteRepositorio.GetPeticionesAbiertas();
             return Ok(datos.Lista);
@@ -69,6 +70,17 @@ namespace backend_tfg.Controllers
         public async Task<ActionResult<PeticionSoporte>> AsignarPeticionAdmin(SoporteAsignarPeticionDto soporteAsignarPeticionDto)
         {
             var dato = await _soporteRepositorio.AsignarPeticionAdmin(soporteAsignarPeticionDto.IdPeticion, soporteAsignarPeticionDto.IdUsuarioAdmin);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
+        }
+
+        [HttpPost()]
+        public async Task<ActionResult<PeticionSoporte>> CrearPeticion(PeticionSoporte soporteCrearPeticionDto)
+        {
+            var dato = await _soporteRepositorio.Create(soporteCrearPeticionDto);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);

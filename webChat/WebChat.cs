@@ -10,28 +10,42 @@ using backend_tfg.repositorios;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver.Core.Authentication;
+using tfg_backend.interfaces;
 
 public class WebChat : Hub
 {
+    private static ConcurrentDictionary<string, string> UsuariosSoporte = new ConcurrentDictionary<string, string>();
     private static ConcurrentDictionary<string, string> UsuariosConectados = new ConcurrentDictionary<string, string>();
     private readonly IChatRepositorio _chatRepositorio;
+    private readonly ISoporteRepositorio _soporteRepositorio;
     private IConfiguration _config;
 
-    public WebChat(IChatRepositorio chatRepositorio, IConfiguration config)
+    public WebChat(IChatRepositorio chatRepositorio, ISoporteRepositorio soporteRepositorio, IConfiguration config)
     {
         _chatRepositorio = chatRepositorio;
+        _soporteRepositorio = soporteRepositorio;
         _config = config;
 
     }
 
     public override async Task OnConnectedAsync()
     {
+        var tipoComunicacion = Context.GetHttpContext().Request.Query["tipoComunicacion"].ToString();
         var userName = Context.GetHttpContext().Request.Query["user"].ToString();
         var token = Context.GetHttpContext().Request.Query["token"].ToString();
         if (userName is not null && token is not null && ValidateToken(token))
         {
-            var estado = UsuariosConectados.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId); await Clients.All.SendAsync("UserConnected", userName);
-            await base.OnConnectedAsync();
+            if (tipoComunicacion == "Chat"){
+                var estado = UsuariosConectados.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId); 
+                await Clients.All.SendAsync("UserConnected", userName);
+                await base.OnConnectedAsync();
+            }
+            if (tipoComunicacion == "Soporte")
+            {
+                var estado = UsuariosSoporte.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
+                await Clients.All.SendAsync("UserConnected", userName);
+                await base.OnConnectedAsync();
+            }
         }
     }
 
@@ -45,8 +59,28 @@ public class WebChat : Hub
     }
 
     public async Task onEnviarMensajeDirecto(NewMessage message)
+    {   
+        if (message.grupo == "Chat"){
+            if ( UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
+            {
+                await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
+                
+            }
+            var chat = await this._chatRepositorio.postMessageUsers(message);
+        }
+        if (message.grupo == "Soporte"){
+            if (UsuariosSoporte.TryGetValue(message.destinatario, out var connectionId))
+            {
+                await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
+                var chat = await this._chatRepositorio.postMessageUsers(message);
+            }
+        }
+
+        
+    }
+    public async Task onEnviarMensajeSoporte(NewMessage message)
     {
-        if (UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
+        if (UsuariosSoporte.TryGetValue(message.destinatario, out var connectionId))
         {
             await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
             var chat = await this._chatRepositorio.postMessageUsers(message);
@@ -81,4 +115,4 @@ public class WebChat : Hub
     }
 }
 
-public record NewMessage(string usuario, string mensaje, string destinatario);
+public record NewMessage(string usuario, string mensaje, string grupo, string destinatario);

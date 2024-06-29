@@ -30,7 +30,7 @@ public class ContextoDB
                 nombre = "User";
             } else if (typeof(T).Name.Equals("Chat")) {
                 nombre = "Chat";
-            } else if (typeof(T).Name.Equals("Peticion")) {
+            } else if (typeof(T).Name.Equals("PeticionSoporte")) {
                 nombre = "Soporte";
             }
      

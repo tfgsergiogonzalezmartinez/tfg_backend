@@ -25,10 +25,13 @@ namespace backend_tfg.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetAll()
+        public async Task<ActionResult<List<UserGetDto>>> GetAll()
         {
             var datos = await _usuarioRepositorio.GetAll();
-            return Ok(datos.Lista);
+            if (datos.Lista is null){
+                return BadRequest(datos.Mensaje);
+            }
+                return Ok(UserGetDto.convListaDto(datos.Lista));
         }
 
         [Authorize(Roles = "admin")]
@@ -45,7 +48,7 @@ namespace backend_tfg.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<User>> Register(UserCreateDto usuarioCreaDTO)
+        public async Task<ActionResult<UserLoginGetDto>> Register(UserCreateDto usuarioCreaDTO)
         {
             var dato = await _usuarioRepositorio.Register(usuarioCreaDTO);
             if (dato.Resultado != 0)
@@ -57,7 +60,7 @@ namespace backend_tfg.Controllers
 
 
         [HttpPost("Login")]
-        public async Task<ActionResult> Login(UserLoginDto usuarioLoginDTO)
+        public async Task<ActionResult<UserGetDto>> Login(UserLoginDto usuarioLoginDTO)
         {
             var dato = await _usuarioRepositorio.Login(usuarioLoginDTO);
             if (dato.Resultado != 0)
@@ -68,7 +71,7 @@ namespace backend_tfg.Controllers
 
         }
         [HttpPost("CambiarPassword")]
-        public async Task<ActionResult> CambiarPassword(UserCambiarPasswordDto userCambiarPassword)
+        public async Task<ActionResult<UserGetDto>> CambiarPassword(UserCambiarPasswordDto userCambiarPassword)
         {
             var dato = await _usuarioRepositorio.CambiarPassword(userCambiarPassword);
             if (dato.Resultado != 0)
@@ -76,11 +79,11 @@ namespace backend_tfg.Controllers
                 return BadRequest(dato.Mensaje);
             }
 
-            return Ok(dato.Valor);
+            return Ok(new UserGetDto(dato.Valor));
 
         }
         [HttpPost("ModificarRol")]
-        public async Task<ActionResult> ModificarRol(UserCambiarRolDto userCambiarRolDto)
+        public async Task<ActionResult<UserGetDto>> ModificarRol(UserCambiarRolDto userCambiarRolDto)
         {
             var dato = await _usuarioRepositorio.ModificarRol(userCambiarRolDto);
             if (dato.Resultado != 0)
@@ -88,19 +91,18 @@ namespace backend_tfg.Controllers
                 return BadRequest(dato.Mensaje);
             }
 
-            return Ok(dato.Valor);
+            return Ok(new UserGetDto(dato.Valor));
         }
 
         [HttpGet("ObtenerUsuariosCoincidentes/{nombre}")]
-        public async Task<ActionResult> ObtenerUsuariosCoincidentes(string nombre)
+        public async Task<ActionResult<UserGetDto>> ObtenerUsuariosCoincidentes(string nombre)
         {
             var dato = await _usuarioRepositorio.ObtenerUsuariosCoincidentes(nombre);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
             }
-
-            return Ok(dato.Lista);
+            return Ok(UserGetDto.convListaDto(dato.Lista));
         }
 
         [HttpPost("{userId}/subirBase64")]
@@ -154,7 +156,7 @@ namespace backend_tfg.Controllers
         }
         
         [HttpGet("{userId}/fotoBase64")]
-        public IActionResult ObtenerFotoBase64(string userId)
+        public async Task<IActionResult> ObtenerFotoBase64(string userId)
         {
             var rutaCarpeta = Path.Combine("data", userId);
             var rutaArchivoJpg = Path.Combine(rutaCarpeta, "avatar.jpg");
@@ -184,7 +186,7 @@ namespace backend_tfg.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<ActionResult<User>> Get(string userId)
+        public async Task<ActionResult<UserGetDto>> Get(string userId)
         {
             var dato = await _usuarioRepositorio.GetById(userId);
             if (dato.Resultado != 0)
@@ -192,7 +194,7 @@ namespace backend_tfg.Controllers
                 return BadRequest(dato.Mensaje);
             }
 
-            return Ok(dato.Valor);
+            return Ok(new UserGetDto(dato.Valor));
         }
     }
 
