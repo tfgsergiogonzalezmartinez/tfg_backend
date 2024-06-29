@@ -186,7 +186,7 @@ namespace backend_tfg.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<ActionResult<UserGetDto>> Get(string userId)
+        public async Task<ActionResult<UserGetDto>> GetById(string userId)
         {
             var dato = await _usuarioRepositorio.GetById(userId);
             if (dato.Resultado != 0)

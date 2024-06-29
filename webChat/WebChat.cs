@@ -14,7 +14,6 @@ using tfg_backend.interfaces;
 
 public class WebChat : Hub
 {
-    private static ConcurrentDictionary<string, string> UsuariosSoporte = new ConcurrentDictionary<string, string>();
     private static ConcurrentDictionary<string, string> UsuariosConectados = new ConcurrentDictionary<string, string>();
     private readonly IChatRepositorio _chatRepositorio;
     private readonly ISoporteRepositorio _soporteRepositorio;
@@ -30,22 +29,13 @@ public class WebChat : Hub
 
     public override async Task OnConnectedAsync()
     {
-        var tipoComunicacion = Context.GetHttpContext().Request.Query["tipoComunicacion"].ToString();
         var userName = Context.GetHttpContext().Request.Query["user"].ToString();
         var token = Context.GetHttpContext().Request.Query["token"].ToString();
         if (userName is not null && token is not null && ValidateToken(token))
-        {
-            if (tipoComunicacion == "Chat"){
-                var estado = UsuariosConectados.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId); 
-                await Clients.All.SendAsync("UserConnected", userName);
-                await base.OnConnectedAsync();
-            }
-            if (tipoComunicacion == "Soporte")
-            {
-                var estado = UsuariosSoporte.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
-                await Clients.All.SendAsync("UserConnected", userName);
-                await base.OnConnectedAsync();
-            }
+        { 
+            var estado = UsuariosConectados.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId); 
+            await Clients.All.SendAsync("UserConnected", userName);
+            await base.OnConnectedAsync();
         }
     }
 
@@ -58,34 +48,26 @@ public class WebChat : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task onEnviarMensajeDirecto(NewMessage message)
+    public async Task onEnviarMensajeDirectoChat(NewMessage message)
     {   
-        if (message.grupo == "Chat"){
-            if ( UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
-            {
-                await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
-                
-            }
-            var chat = await this._chatRepositorio.postMessageUsers(message);
-        }
-        if (message.grupo == "Soporte"){
-            if (UsuariosSoporte.TryGetValue(message.destinatario, out var connectionId))
-            {
-                await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
-                var chat = await this._chatRepositorio.postMessageUsers(message);
-            }
-        }
-
-        
-    }
-    public async Task onEnviarMensajeSoporte(NewMessage message)
-    {
-        if (UsuariosSoporte.TryGetValue(message.destinatario, out var connectionId))
+        if ( UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
         {
-            await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
-            var chat = await this._chatRepositorio.postMessageUsers(message);
+            await Clients.Client(connectionId).SendAsync("mensajePrivadoChat", message);
+            
         }
+        var chat = await this._chatRepositorio.postMessageUsers(message);
     }
+
+    public async Task onEnviarMensajeDirectoSoporte(string idPeticion, NewMessage message)
+    {   
+        if (UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
+        {
+            await Clients.Client(connectionId).SendAsync("mensajePrivadoSoporte", message);
+        }
+        var chat = await this._soporteRepositorio.PostMessageUsers(idPeticion, message);
+    }
+
+
 
     private bool ValidateToken(string token)
     {
@@ -115,4 +97,4 @@ public class WebChat : Hub
     }
 }
 
-public record NewMessage(string usuario, string mensaje, string grupo, string destinatario);
+public record NewMessage(string usuario, string mensaje, string destinatario);

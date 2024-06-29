@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend_tfg;
 using backend_tfg.interfaces;
+using backend_tfg.modelos.EntidadChat;
 using backend_tfg.repositorios;
 using MongoDB.Driver;
 using tfg_backend.interfaces;
@@ -112,7 +113,20 @@ namespace tfg_backend.repositorios
             return new RItem<PeticionSoporte>(dato);
         }
 
+        public async Task<RItem<PeticionSoporte>> PostMessageUsers(string idPeticion ,NewMessage newMsg)
+        {
 
-
+            var datos = this.collection.UpdateOne(
+                Builders<PeticionSoporte>.Filter.Eq("Id", idPeticion),
+                Builders<PeticionSoporte>.Update.Push("Mensajes", new Message{
+                    UserId = newMsg.usuario,
+                    Msg = newMsg.mensaje,
+                    Fecha = DateTime.Now,
+                    Leido = false
+                })
+            );
+            var chatActualizado = await this.collection.Find(peticion => peticion.Id == idPeticion).FirstOrDefaultAsync();
+            return new RItem<PeticionSoporte>(chatActualizado);
+        }
     }
 }

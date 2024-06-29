@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend_tfg.interfaces;
 using backend_tfg.modelos.EntidadChat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,19 @@ namespace backend_tfg.Controllers
         public SoporteController(ISoporteRepositorio soporteRepositorio)
         {
             this._soporteRepositorio = soporteRepositorio;
+        }
+
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RItem<PeticionSoporte>>> GetById(string id)
+        {
+            var datos = await _soporteRepositorio.GetById(id);
+            if (datos is null)
+            {
+                return BadRequest(datos.Mensaje);
+            }
+            return Ok(datos.Valor);
         }
 
         [HttpGet("GetPeticionByUsuario/{usuarioId}")]

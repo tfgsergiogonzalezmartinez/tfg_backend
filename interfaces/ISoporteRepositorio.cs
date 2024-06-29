@@ -15,6 +15,7 @@ namespace tfg_backend.interfaces
         Task<RLista<PeticionSoporte>> GetPeticionesCerradas();
         Task<RLista<PeticionSoporte>> GetPeticionesAbiertas();
         Task<RItem<PeticionSoporte>> AsignarPeticionAdmin(string idPeticion, string idAdmin);
+        Task<RItem<PeticionSoporte>> PostMessageUsers(string idPeticion ,NewMessage newMsg);
         
         
     }
