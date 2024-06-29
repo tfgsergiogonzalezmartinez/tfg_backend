@@ -20,37 +20,22 @@ public class WebChat : Hub
      public override async Task OnConnectedAsync()
     {
         var userName = Context.GetHttpContext().Request.Query["user"].ToString();
-        var estado = UsuariosConectados.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
-        await Clients.All.SendAsync("UserConnected", userName);
+        var estado = UsuariosConectados.AddOrUpdate(userName, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);        await Clients.All.SendAsync("UserConnected", userName);
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
+        // Remover el usuario de la lista de conectados
         UsuariosConectados.TryRemove(Context.ConnectionId, out var userName);
 
         await Clients.All.SendAsync("UserDisconnected", userName);
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task JoinGroup(string groupName, string userName)
+    public async Task onEnviarMensajeDirecto(NewMessage message)
     {
-        await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-    }
-
-    public async Task LeaveGroup(string groupName, string userName)
-    {
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-    }
-
-    public async Task SendMessage(NewMessage message)
-    {
-
-        await SendDirectMessage(message.destinatario, message);
-    }
-    public async Task SendDirectMessage(string userId, NewMessage message)
-    {
-        if (UsuariosConectados.TryGetValue(userId, out var connectionId))
+        if (UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
         {
             await Clients.Client(connectionId).SendAsync("mensajePrivado", message);
             var chat = await this._chatRepositorio.postMessageUsers(message);
