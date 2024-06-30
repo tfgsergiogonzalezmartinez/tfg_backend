@@ -59,9 +59,9 @@ namespace backend_tfg.Controllers
         }
 
         [HttpPost("AbrirPeticion")]
-        public async Task<ActionResult<PeticionSoporte>> AbrirPeticion(string peticionId)
+        public async Task<ActionResult<PeticionSoporte>> AbrirPeticion(SoporteAsignarPeticionDto peticionId)
         {
-            var dato = await _soporteRepositorio.AbrirPeticion(peticionId);
+            var dato = await _soporteRepositorio.AbrirPeticion(peticionId.IdPeticion);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
@@ -70,9 +70,9 @@ namespace backend_tfg.Controllers
         }
 
         [HttpPost("CerrarPeticion")]
-        public async Task<ActionResult<PeticionSoporte>> CerrarPeticion(string peticionId)
+        public async Task<ActionResult<PeticionSoporte>> CerrarPeticion(SoporteAsignarPeticionDto peticionId)
         {
-            var dato = await _soporteRepositorio.CerrarPeticion(peticionId);
+            var dato = await _soporteRepositorio.CerrarPeticion(peticionId.IdPeticion, peticionId.IdUsuarioAdmin);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
@@ -95,6 +95,16 @@ namespace backend_tfg.Controllers
         public async Task<ActionResult<PeticionSoporte>> CrearPeticion(PeticionSoporte soporteCrearPeticionDto)
         {
             var dato = await _soporteRepositorio.Create(soporteCrearPeticionDto);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
+        }
+        [HttpPost("NuevaPeticion")]
+        public async Task<ActionResult<PeticionSoporte>> NuevaPeticion(SoporteNuevaPeticionDto soporteCrearPeticionDto)
+        {
+            var dato = await _soporteRepositorio.NuevaPeticion(soporteCrearPeticionDto.Asunto, soporteCrearPeticionDto.Descripcion, soporteCrearPeticionDto.UserId);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);

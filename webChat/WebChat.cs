@@ -48,6 +48,17 @@ public class WebChat : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
+    public async Task onEnviarMensajeGrupo(NewMessage message)
+    {
+        await Clients.Group(message.grupo).SendAsync("mensajeGrupo", message);
+    }
+
+    public async Task onUnirGrupo(string grupo)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, grupo);
+    }
+
+
     public async Task onEnviarMensajeDirectoChat(NewMessage message)
     {   
         if ( UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
@@ -60,10 +71,8 @@ public class WebChat : Hub
 
     public async Task onEnviarMensajeDirectoSoporte(string idPeticion, NewMessage message)
     {   
-        if (UsuariosConectados.TryGetValue(message.destinatario, out var connectionId))
-        {
-            await Clients.Client(connectionId).SendAsync("mensajePrivadoSoporte", message);
-        }
+        await Clients.Group(idPeticion).SendAsync("mensajePrivadoSoporte", message);
+
         var chat = await this._soporteRepositorio.PostMessageUsers(idPeticion, message);
     }
 
@@ -97,4 +106,4 @@ public class WebChat : Hub
     }
 }
 
-public record NewMessage(string usuario, string mensaje, string destinatario);
+public record NewMessage(string usuario, string mensaje, string grupo, string destinatario);

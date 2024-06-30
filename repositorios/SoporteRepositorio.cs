@@ -81,10 +81,11 @@ namespace tfg_backend.repositorios
         }
 
 
-        public async Task<RItem<PeticionSoporte>> CerrarPeticion(string peticionId)
+        public async Task<RItem<PeticionSoporte>> CerrarPeticion(string peticionId, string idUserAdmin)
         {
             var filter = Builders<PeticionSoporte>.Filter.Eq("Id", peticionId);
-            var update = Builders<PeticionSoporte>.Update.Set("Abierta", false);
+            var update = Builders<PeticionSoporte>.Update.Set("Abierta", false)
+                        .Set("SolucionadoByAdmin", idUserAdmin);
             var dato = await collection.FindOneAndUpdateAsync(filter, update);
             if (dato is null)
             {
@@ -128,5 +129,37 @@ namespace tfg_backend.repositorios
             var chatActualizado = await this.collection.Find(peticion => peticion.Id == idPeticion).FirstOrDefaultAsync();
             return new RItem<PeticionSoporte>(chatActualizado);
         }
+
+        public async Task<RItem<PeticionSoporte>> NuevaPeticion(string Asunto ,string Descripcion, string UsuarioId)
+        {
+            var creacion = await this.Create(new PeticionSoporte{
+                FechaCreacion = DateTime.Now,
+                UsuarioCreacion = UsuarioId,
+                UsuarioPeticionario = UsuarioId,
+                Abierta = true,
+                Mensajes = new List<Message>{
+                    new Message{
+                        UserId = UsuarioId,
+                        Msg = "Asunto: "+Asunto,
+                        Fecha = DateTime.Now,
+                        Leido = false
+                    },
+                    new Message{
+                        UserId = UsuarioId,
+                        Msg = "Descripción: "+Descripcion,
+                        Fecha = DateTime.Now,
+                        Leido = false
+                    }
+                },
+            });
+            if (creacion.Resultado != 0){
+                return new RItem<PeticionSoporte>(null){
+                    Mensaje = "No se ha podido crear la peticion",
+                    Resultado = -1
+                };
+            }
+            return creacion;
+        }
+            
     }
 }
