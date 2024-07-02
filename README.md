@@ -18,7 +18,7 @@ Para comenzar a usar la aplicación localmente, sigue estos pasos:
     `npm i`
 4.  Inicia el backend .NET accediedo a vsCode presionando `F5` o escribiendo el siguiente comando:
 
-   `dotnet run`
+    `dotnet run`
 
 6.  Inicia el frontend Angular accediedo a vsCode presionando `F5` o escribiendo el siguiente comando:
 
