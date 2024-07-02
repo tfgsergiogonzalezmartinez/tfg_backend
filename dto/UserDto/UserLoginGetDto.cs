@@ -6,7 +6,7 @@ using backend_tfg.modelos.usuario;
 
 namespace backend_tfg.dto.UserDto
 {
-    public class UserLoginGetDto : UserGetDTO
+    public class UserLoginGetDto : UserGetDto
     {
         public string Token { get; set; }
    

@@ -8,6 +8,13 @@ namespace backend_tfg.interfaces
 {
     public interface IChatRepositorio : IBaseRepositorio<Chat>
     {
-        Task<RLista<Chat>> getByUsers(List<string> userIds);
+        Task<RItem<Chat>> getByUsers(List<string> userIds);
+        Task<RLista<Chat>> getByUser(string userId);
+        Task<RItem<Chat>> postMessageUsers (NewMessage newMsg);
+        Task<RItem<Chat>> LeerChat(string idUser1, string idUser2);
+        Task<RItem<int>> GetNumMensajesSinLeer(string idUser1, string idUser2);
+        Task<RLista<Chat>> GetChatsAbiertos(string userId);
+        Task<RItem<Chat>> CerrarChat(string userId1, string userId2);
+        Task<RItem<Chat>> Abrirchat(string userId1, string userId2);
     }
 }

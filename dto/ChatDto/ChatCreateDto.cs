@@ -10,20 +10,20 @@ namespace backend_tfg.dto.ChatDto
     public class ChatCreateDto
     {
         public List<string> UserIds { get; set; }  // Listas de dos en dos, o posibilidad de crear grupos si hay mas de dos
-        public List<MessageDto> Messages { get; set; }
+        public List<MessageDto> Mensajes { get; set; }
 
         public ChatCreateDto()
         {
             UserIds = new List<string>();
-            Messages = new List<MessageDto>();
+            Mensajes = new List<MessageDto>();
         }
 
         public Chat toEntidad(Chat entidad ){
             entidad.UserIds = UserIds;
-            entidad.Messages = new List<Message>();
-            foreach (var msg in this.Messages)
+            entidad.Mensajes = new List<Message>();
+            foreach (var msg in this.Mensajes)
             {
-                entidad.Messages.Add(msg.toEntidad(new Message()));
+                entidad.Mensajes.Add(msg.toEntidad(new Message()));
             }
             return entidad;
         }

@@ -23,14 +23,17 @@ if (entorno.PRODUCCION)
 }else{
     entorno.IP = builder.Configuration["IP_DESARROLLO"];
 }
-
+builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS", builder =>
         builder.WithOrigins(entorno.IP)
-              .AllowAnyHeader()
-              .AllowAnyMethod());
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true));
 });
+ 
 
 builder.Services.AddContextMongoDB(builder.Configuration,entorno.DB_HOST+":"+entorno.DB_PORT,entorno.DB_NAME);
 builder.Services.AddRepositorios();
@@ -122,6 +125,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<WebChat>("/WebChat");
+});
 
 
 app.Run();

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend_tfg.interfaces;
 using backend_tfg.repositorios;
+using tfg_backend.interfaces;
+using tfg_backend.repositorios;
 
 namespace backend_tfg
 {
@@ -23,6 +25,7 @@ namespace backend_tfg
         {
             services.AddScoped<IUserRepositorio,UserRepositorio>();
             services.AddScoped<IChatRepositorio,ChatRepositorio>();
+            services.AddScoped<ISoporteRepositorio,SoporteRepositorio>();
             return services;
         }   
     }

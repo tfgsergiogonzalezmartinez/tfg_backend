@@ -23,7 +23,7 @@ namespace backend_tfg.dto.UserDto
         public void toEntidad(User usuario)
         {
             usuario.Email = Email;
-            usuario.hashedPassword = Password;
+            usuario.HashedPassword = Password;
             usuario.FechaNacimiento = FechaNacimiento;
             usuario.Nombre = Nombre;
             usuario.Apellido1 = Apellido1;
