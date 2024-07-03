@@ -32,6 +32,10 @@ public class ContextoDB
                 nombre = "Chat";
             } else if (typeof(T).Name.Equals("PeticionSoporte")) {
                 nombre = "Soporte";
+            }else if (typeof(T).Name.Equals("Plantilla")) {
+                nombre = "Plantilla";
+            }else if (typeof(T).Name.Equals("Proyecto")) {
+                nombre = "Proyecto";
             }
      
             return _database.GetCollection<T>(nombre);
