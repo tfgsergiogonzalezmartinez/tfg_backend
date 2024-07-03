@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using backend_tfg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using tfg_backend.dto.Proyecto;
 using tfg_backend.interfaces;
 using tfg_backend.modelos.Proyecto;
 
@@ -34,11 +35,23 @@ namespace tfg_backend.Controllers
             return Ok(datos.Lista);
         }
 
-        [HttpGet("getProyectosUsuario/{idUsuario}")]
+        [HttpGet("GetProyectosUsuario/{idUsuario}")]
         public async Task<ActionResult<List<Proyecto>>> getProyectosUsuario(string idUsuario)
         {
             var dato = await _proyectoRepositorio.getProyectosUsuario(idUsuario);
             return Ok(dato.Lista);
+        }
+
+
+        [HttpPost("GenerarProyecto")]
+        public async Task<ActionResult<Proyecto>> GenerarProyecto(CrearProyectoDto crearProyectoDto)
+        {
+            var dato = await _proyectoRepositorio.GenerarProyecto(crearProyectoDto);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Valor);
         }
         
     }
