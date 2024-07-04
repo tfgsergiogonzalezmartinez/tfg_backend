@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using backend_tfg.modelos.usuario;
 using BCrypt.Net;
 using MongoDB.Driver;
+using Newtonsoft.Json;
+using tfg_backend.modelos.Proyecto;
 
 namespace backend_tfg
 {

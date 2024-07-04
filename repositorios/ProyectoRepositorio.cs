@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -53,17 +54,52 @@ namespace tfg_backend.repositorios
             var ProductosJson = JsonSerializer.Serialize(crearProyectoDto.BaseDatosTienda.Productos);
             var CategoriaJson = JsonSerializer.Serialize(crearProyectoDto.BaseDatosTienda.Categorias);
 
-            string rutaArchivo = Path.Combine("data", proyecto.Usuario, proyecto.Nombre, "bbdd_productos.json");
+            this.InicializarPlantilla(crearProyectoDto);
+            string rutaArchivo = Path.Combine("data", proyecto.Usuario, proyecto.Nombre, crearProyectoDto.Plantilla,"plantila_tienda_backend", "dbModelos", "bbdd_productos.json");
             Directory.CreateDirectory(Path.GetDirectoryName(rutaArchivo));
             File.WriteAllText(rutaArchivo, ProductosJson);
           
-            rutaArchivo = Path.Combine("data", proyecto.Usuario, proyecto.Nombre, "bbdd_categorias.json");
+            rutaArchivo = Path.Combine("data", proyecto.Usuario, proyecto.Nombre,crearProyectoDto.Plantilla,"plantila_tienda_backend","dbModelos", "bbdd_categorias.json");
             Directory.CreateDirectory(Path.GetDirectoryName(rutaArchivo));
             File.WriteAllText(rutaArchivo, CategoriaJson);
 
 
+            this.GenerarProyectoPlantilla(crearProyectoDto);
+            this.LimpiezaProyecto(crearProyectoDto);
+
+
 
             return dato;
+        }
+
+        private void InicializarPlantilla(CrearProyectoDto crearProyectoDto ){
+            string rutaPlantillaCopiar = Path.Combine("plantillas",crearProyectoDto.Plantilla,crearProyectoDto.Plantilla+".zip");
+            string rutaPegar = Path.Combine("data",crearProyectoDto.Usuario,crearProyectoDto.Nombre, crearProyectoDto.Plantilla+ ".zip");
+            string rutaProyectoUsuario = Path.Combine("data",crearProyectoDto.Usuario,crearProyectoDto.Nombre, crearProyectoDto.Plantilla);
+            Directory.CreateDirectory(Path.GetDirectoryName(rutaProyectoUsuario));
+
+            File.Copy(rutaPlantillaCopiar, rutaPegar, overwrite: true);
+            ZipFile.ExtractToDirectory(rutaPegar, rutaProyectoUsuario);
+        }
+
+        private void GenerarProyectoPlantilla(CrearProyectoDto crearProyectoDto){
+            string rutaDestino = Path.Combine("data",crearProyectoDto.Usuario,crearProyectoDto.Nombre, crearProyectoDto.Plantilla);
+            string rutaCarpetaComprimida = Path.Combine("data",crearProyectoDto.Usuario,crearProyectoDto.Nombre,crearProyectoDto.Usuario +crearProyectoDto.Nombre+"v1" + ".zip");
+            ZipFile.CreateFromDirectory(rutaDestino, rutaCarpetaComprimida);
+
+        }
+        private void LimpiezaProyecto(CrearProyectoDto crearProyectoDto){
+        string rutaZipResidual = Path.Combine("data",crearProyectoDto.Usuario,crearProyectoDto.Nombre, crearProyectoDto.Plantilla+ ".zip");
+        string rutaDirectorioResidual = Path.Combine("data",crearProyectoDto.Usuario,crearProyectoDto.Nombre, crearProyectoDto.Plantilla);
+        if (File.Exists(rutaZipResidual))
+        {
+            File.Delete(rutaZipResidual);
+        }
+        if (Directory.Exists(rutaDirectorioResidual))
+        {
+            Directory.Delete(rutaDirectorioResidual, true);
+            Console.WriteLine("Directorio de proyecto usuario eliminado exitosamente.");
+        }
         }
 
 

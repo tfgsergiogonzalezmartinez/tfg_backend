@@ -44,15 +44,31 @@ namespace tfg_backend.Controllers
 
 
         [HttpPost("GenerarProyecto")]
-        public async Task<ActionResult<Proyecto>> GenerarProyecto(CrearProyectoDto crearProyectoDto)
+        public async Task<IActionResult> GenerarProyecto(CrearProyectoDto crearProyectoDto)
         {
             var dato = await _proyectoRepositorio.GenerarProyecto(crearProyectoDto);
             if (dato.Resultado != 0)
             {
                 return BadRequest(dato.Mensaje);
             }
-            return Ok(dato.Valor);
+
+            // Suponiendo que rutaCarpetaComprimida contiene la ruta del archivo zip generado
+            string rutaProyectoComprimido = Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre, crearProyectoDto.Usuario+crearProyectoDto.Nombre+"v1" + ".zip");
+
+            if (!System.IO.File.Exists(rutaProyectoComprimido))
+            {
+                return NotFound("Archivo no encontrado.");
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(rutaProyectoComprimido, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, "application/zip", crearProyectoDto.Nombre + ".zip");
         }
-        
+
     }
 }
