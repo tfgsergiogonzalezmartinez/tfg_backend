@@ -51,8 +51,6 @@ namespace tfg_backend.Controllers
             {
                 return BadRequest(dato.Mensaje);
             }
-
-            // Suponiendo que rutaCarpetaComprimida contiene la ruta del archivo zip generado
             string rutaProyectoComprimido = Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre, crearProyectoDto.Usuario+crearProyectoDto.Nombre+"v1" + ".zip");
 
             if (!System.IO.File.Exists(rutaProyectoComprimido))
@@ -69,6 +67,39 @@ namespace tfg_backend.Controllers
 
             return File(memory, "application/zip", crearProyectoDto.Nombre + ".zip");
         }
+
+
+        [HttpPost("EliminarProyecto")]
+        public async Task<IActionResult> EliminarProyecto(Proyecto proyecto)
+        {
+            var dato = await _proyectoRepositorio.EliminarProyecto(proyecto);
+            if (dato.Resultado != 0)
+            {
+                return BadRequest(dato.Mensaje);
+            }
+            return Ok(dato.Mensaje);
+        }
+
+        [HttpGet("DescargarProyecto/{id}/{nombre}")]
+        public async Task<IActionResult> DescargarProyecto(string id , string nombre){
+            string rutaProyectoComprimido = Path.Combine("data", id, nombre, id+nombre+"v1" + ".zip");
+
+            if (!System.IO.File.Exists(rutaProyectoComprimido))
+            {
+                return NotFound("Archivo no encontrado.");
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(rutaProyectoComprimido, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, "application/zip", nombre + ".zip");
+        }
+
+
 
     }
 }

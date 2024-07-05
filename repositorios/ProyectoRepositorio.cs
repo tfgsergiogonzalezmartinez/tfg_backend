@@ -102,14 +102,31 @@ namespace tfg_backend.repositorios
             }
         }
 
+        public async Task<RItem<Proyecto>> EliminarProyecto(Proyecto eliminarProyectoDto)
+        {
+            var filter = Builders<Proyecto>.Filter.Eq(p => p.Id, eliminarProyectoDto.Id);
+            var result = await this.collection.DeleteOneAsync(filter);
+
+            if (result.DeletedCount == 0)
+            {
+                return new RItem<Proyecto>(null)
+                {
+                    Mensaje = "Error al eliminar el proyecto",
+                    Resultado = -1
+                };
+            }
+
+            return new RItem<Proyecto>(eliminarProyectoDto);
+        }
+
         private async Task ImplementarPersonalizacionAsync(CrearProyectoDto crearProyectoDto)
         {
             string rutaEnv = Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre, crearProyectoDto.Plantilla, ".env");
             using (StreamWriter sw = new StreamWriter(rutaEnv, true))
             {
                 sw.WriteLine("Titulo=" + crearProyectoDto.Personalizacion.Titulo);
+                sw.WriteLine("Logo_Extension=" + crearProyectoDto.Personalizacion.Extension);
                 sw.WriteLine("Moneda=" + crearProyectoDto.Personalizacion.Moneda);
-                sw.WriteLine("Logo_Extension=" + this.extensionLogo);
                 sw.WriteLine("Color_background=" + "'"+crearProyectoDto.Personalizacion.Color_backgound+ "'");
                 sw.WriteLine("Color_background_light=" + "'"+ crearProyectoDto.Personalizacion.Color_backgound_light+ "'");
                 sw.WriteLine("Color_background_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_backgound_dark+ "'");
@@ -192,7 +209,5 @@ namespace tfg_backend.repositorios
             var imageData = Convert.FromBase64String(base64Data);
             await System.IO.File.WriteAllBytesAsync(rutaArchivo, imageData);
         }
-
-
     }
 }

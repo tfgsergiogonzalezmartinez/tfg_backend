@@ -11,8 +11,8 @@ namespace tfg_backend.dto.Plantillas.Tienda
         public string Descripcion {get; set;}
         public double Precio {get; set;}
         public int Stock {get; set;}
-        public List<string> Fotos {get; set;}
-        public string FotoPrincipal {get; set;}
+        public List<string>? Fotos {get; set;}
+        public string? FotoPrincipal {get; set;}
         public string Categoria {get; set;}
         public List<string> Tallas {get; set;}
         public List<string> Colores {get; set;}   

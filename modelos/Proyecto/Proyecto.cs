@@ -11,7 +11,7 @@ namespace tfg_backend.modelos.Proyecto
         public string Usuario {get; set;}
         public string Nombre {get; set;}
         public string Plantilla {get; set;}
-        public string Ruta {get; set;}
+        public string? Ruta {get; set;}
         public Personalizacion Personalizacion {get; set;}
     }
 }

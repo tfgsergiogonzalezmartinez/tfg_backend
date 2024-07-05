@@ -12,5 +12,6 @@ namespace tfg_backend.interfaces
     {
         Task<RLista<Proyecto>> getProyectosUsuario(string idUsuario);
         Task<RItem<Proyecto>> GenerarProyecto(CrearProyectoDto proyecto);
+        Task<RItem<Proyecto>> EliminarProyecto(Proyecto eliminarProyectoDto);
     }
 }

@@ -7,10 +7,11 @@ namespace tfg_backend.modelos.Proyecto
 {
     public class Personalizacion
     {
-        public string Logo { get; set; }
-        public string Moneda { get; set; }
+        public string? Logo { get; set; }
+        public string? Extension { get; set; }
+        public string? Moneda { get; set; }
 
-        public string Titulo { get; set; }
+        public string? Titulo { get; set; }
 
         public string Color_backgound { get; set; }
         public string Color_backgound_light { get; set; }
