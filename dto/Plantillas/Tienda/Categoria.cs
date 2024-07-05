@@ -8,6 +8,6 @@ namespace tfg_backend.dto.Plantillas.Tienda
     public class Categoria
     {
         public string Nombre {get; set;}
-        public string CategoriaPadre {get; set;}        
+        public string? CategoriaPadre {get; set;}        
     }
 }

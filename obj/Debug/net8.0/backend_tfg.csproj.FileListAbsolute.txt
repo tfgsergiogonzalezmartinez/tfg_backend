@@ -182,7 +182,3 @@ c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\obj\Debug\net8.0\backend_tfg.genr
 c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\obj\Debug\net8.0\ref\backend_tfg.dll
 c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\Newtonsoft.Json.dll
 c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
-c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\data\667bab709a61642783629a21\Prueba1\bbdd_categorias.json
-c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\data\667bab709a61642783629a21\Prueba1\bbdd_productos.json
-c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\data\667bab709a61642783629a21\PruebaCreacionProyecto\bbdd_categorias.json
-c:\Users\Sergio\Desktop\TFG\NewTFG\tfg_backend\bin\Debug\net8.0\data\667bab709a61642783629a21\PruebaCreacionProyecto\bbdd_productos.json
