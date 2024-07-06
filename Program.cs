@@ -124,6 +124,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<WebChat>("/WebChat");
 });
 
-
+app.Urls.Add("http://localhost:"+entorno.API_PORT);
 app.Run();
 

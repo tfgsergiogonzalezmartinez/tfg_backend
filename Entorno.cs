@@ -9,6 +9,7 @@ namespace backend_tfg
     {
 
         public string? IP_FRONT { get; set; }
+        public string API_PORT { get; set; }
 
         
         public string ?DB_HOST { get; set; }
@@ -28,6 +29,7 @@ namespace backend_tfg
         
         public Entorno(IConfiguration configuration){
             IP_FRONT = configuration["IP_FRONT"];
+            API_PORT = configuration["API_PORT"];
 
             DB_HOST = configuration["DB_HOST"];
             DB_PORT = Convert.ToInt32(configuration["DB_PORT"]);
