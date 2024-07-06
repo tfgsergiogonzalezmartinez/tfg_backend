@@ -17,17 +17,12 @@ var databaseName = builder.Configuration.GetConnectionString("MongoDbDatabaseNam
 
 var produccion = builder.Configuration["PRODUCCION"];
 
-if (entorno.PRODUCCION)
-{
-    entorno.IP = builder.Configuration["IP_PRODUCCION"];
-}else{
-    entorno.IP = builder.Configuration["IP_DESARROLLO"];
-}
+
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS", builder =>
-        builder.WithOrigins(entorno.IP)
+        builder.WithOrigins(entorno.IP_FRONT)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
