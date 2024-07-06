@@ -12,6 +12,7 @@ namespace backend_tfg
         public string? IP { get; set; }
         public string? IP_PRODUCCION { get; set; }
         public string? IP_DESARROLLO { get; set; }
+        
         public string ?DB_HOST { get; set; }
         public int? DB_PORT { get; set; }
         public string? DB_USER { get; set; }
