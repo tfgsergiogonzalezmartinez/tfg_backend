@@ -1,30 +1,28 @@
 Generador de Web Apps
 =====================
+**Este repositorio contiene únicamente el proyecto Backend .NET del generador de aplicaciones web.**
 
-Generador de web Apps es una aplicación web cuyo objetivo principal es generar proyectos completos con archivos de despliegue Docker. Está basada en backend .NET 8, AngularJS como frontend y MongoDB como base de datos. La aplicación sigue el patrón MVC, donde el backend proporciona todos los endpoints necesarios para el intercambio de información con Angular. Incluye autenticación basada en tokens JWT con roles de usuario (administrador y usuario normal), chat en vivo basado en SignalR y un sistema de soporte de tickets.
+Es una aplicación web cuyo objetivo principal es generar proyectos completos con archivos de despliegue Docker. Está basada en backend .NET 8, AngularJS como frontend y MongoDB como base de datos. La aplicación sigue el patrón MVC, donde el backend proporciona todos los endpoints necesarios para el intercambio de información con Angular. Incluye autenticación basada en tokens JWT con roles de usuario (administrador y usuario normal), chat en vivo basado en SignalR y un sistema de soporte de tickets.
 
 🚀 Inicio rápido
 ----------------
+La aplicacion se encuentra accesible en internet a traves del enlace: https://c8dc-2a0c-5a80-100c-e600-bcb7-a241-62cc-4f9a.ngrok-free.app
 
-Para comenzar a usar la aplicación localmente, sigue estos pasos:
+En caso de querer desplegarla en local, siga los siguientes pasos:
 
-1.  Clona el repositorio:
+1. Clona el repositorio:
 
-    `git clone https://github.com/tfgsergiogonzalezmartinez/tfg_backend.git`
+    ```bash
+    git clone https://github.com/tfgsergiogonzalezmartinez/stack_generador.git
+    ```
 
-2.  Instala .NET 8 y Node.js y MongoDb en tu máquina.
-3.  Instala las dependencias de Node.js:
+2. Inicia el proyecto con Docker:
 
-    `npm i`
-4.  Inicia el backend .NET accediedo a vsCode presionando `F5` o escribiendo el siguiente comando:
+    ```bash
+    docker compose up -d
+    ```
 
-    `dotnet run`
-
-6.  Inicia el frontend Angular accediedo a vsCode presionando `F5` o escribiendo el siguiente comando:
-
-    `ng serve`
-
-7.  Abre tu navegador web y accede a `http://localhost:4200` para ver la aplicación en funcionamiento.
+3. Abre tu navegador web y accede a [http://localhost:4200](http://localhost:4200) para ver la aplicación en funcionamiento.
 
 📖 Descripción
 --------------
@@ -88,23 +86,6 @@ En el futuro, se planea implementar las siguientes mejoras:
 -   Integrar más opciones de importacion de bases de datos.
 -   Implementacion de Kubernetes.
 
-💻 Uso
-------
-
-Para utilizar la aplicación localmente, sigue estos pasos:
-
-1. Clona el repositorio en tu máquina local:
-
-     
-     `git clone https://github.com/tfgsergiogonzalezmartinez/tfg_backend.git`
-
-2. inicia el proyecto con docker:
-
-     `docker compose up -d`
-
-3. Abre tu navegador web y accede a `http://localhost:4200` para ver la aplicación en funcionamiento.
- 
-
 
 🤝 Contribuidores
 -----------------
@@ -121,5 +102,5 @@ Para consultas o comentarios, puedes contactarnos a través del correo electrón
 
 Este proyecto está bajo la licencia MIT.
 
-¡Disfruta de Generador de Web Apps! 😊
+¡Disfruta de el Generador de Web Apps! 😊
 --------------------------------------
