@@ -17,17 +17,12 @@ var databaseName = builder.Configuration.GetConnectionString("MongoDbDatabaseNam
 
 var produccion = builder.Configuration["PRODUCCION"];
 
-if (entorno.PRODUCCION)
-{
-    entorno.IP = builder.Configuration["IP_PRODUCCION"];
-}else{
-    entorno.IP = builder.Configuration["IP_DESARROLLO"];
-}
+
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS", builder =>
-        builder.WithOrigins(entorno.IP)
+        builder.WithOrigins(entorno.IP_FRONT)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
@@ -110,7 +105,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -130,6 +124,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<WebChat>("/WebChat");
 });
 
-
+app.Urls.Add("http://localhost:"+entorno.API_PORT);
 app.Run();
 

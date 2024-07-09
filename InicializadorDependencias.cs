@@ -26,6 +26,8 @@ namespace backend_tfg
             services.AddScoped<IUserRepositorio,UserRepositorio>();
             services.AddScoped<IChatRepositorio,ChatRepositorio>();
             services.AddScoped<ISoporteRepositorio,SoporteRepositorio>();
+            services.AddScoped<IPlantillaRepositorio,PlantillaRepositorio>();
+            services.AddScoped<IProyectoRepositorio,ProyectoRepositorio>();
             return services;
         }   
     }
