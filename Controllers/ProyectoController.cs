@@ -77,7 +77,7 @@ namespace tfg_backend.Controllers
             {
                 return BadRequest(dato.Mensaje);
             }
-            return Ok(dato.Mensaje);
+            return Ok(dato);
         }
 
         [HttpGet("DescargarProyecto/{id}/{nombre}")]

@@ -17,7 +17,7 @@ namespace tfg_backend.repositorios
     public class ProyectoRepositorio : BaseRepositorio<Proyecto>, IProyectoRepositorio
     {
         private IConfiguration _config;
-        private string extensionLogo; 
+        private string extensionLogo;
         public ProyectoRepositorio(ContextoDB contexto, IConfiguration config) : base(contexto)
         {
             _config = config;
@@ -40,33 +40,54 @@ namespace tfg_backend.repositorios
 
         public async Task<RItem<Proyecto>> GenerarProyecto(CrearProyectoDto crearProyectoDto)
         {
-            Proyecto proyecto = new Proyecto();
-            proyecto.Nombre = crearProyectoDto.Nombre;
-            proyecto.Usuario = crearProyectoDto.Usuario;
-            proyecto.Plantilla = crearProyectoDto.Plantilla;
-            proyecto.Ruta = crearProyectoDto.Ruta;
-            proyecto.Personalizacion = crearProyectoDto.Personalizacion;
-            var dato = await this.Create(proyecto);
-            if (dato.Resultado != 0)
+            try
             {
+                var comprobarProyecto = await this.collection.Find(p => p.Nombre == crearProyectoDto.Nombre && p.Usuario == crearProyectoDto.Usuario).FirstOrDefaultAsync(); 
+                if (comprobarProyecto is not null){
+                    return new RItem<Proyecto>(null)
+                    {
+                        Mensaje = "Ya existe un proyecto con ese nombre",
+                        Resultado = -1
+                    };
+                }
+
+                Proyecto proyecto = new Proyecto();
+                proyecto.Nombre = crearProyectoDto.Nombre;
+                proyecto.Usuario = crearProyectoDto.Usuario;
+                proyecto.Plantilla = crearProyectoDto.Plantilla;
+                proyecto.Ruta = crearProyectoDto.Ruta;
+                proyecto.Personalizacion = crearProyectoDto.Personalizacion;
+                var dato = await this.Create(proyecto);
+                if (dato.Resultado != 0)
+                {
+                    return new RItem<Proyecto>(null)
+                    {
+                        Mensaje = "Error al crear el proyecto",
+                        Resultado = -1
+                    };
+                }
+
+                this.InicializarPlantilla(crearProyectoDto);
+                this.ImplementarPersonalizacionAsync(crearProyectoDto);
+                this.GenerarBD(crearProyectoDto);
+                this.GenerarProyectoPlantilla(crearProyectoDto);
+                this.LimpiezaProyecto(crearProyectoDto);
+
+                return dato;
+            }
+            catch (Exception e)
+            {
+                if (Directory.Exists(Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre)))
+                {
+                    Directory.Delete(Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre), true);
+                }
+
                 return new RItem<Proyecto>(null)
                 {
                     Mensaje = "Error al crear el proyecto",
                     Resultado = -1
                 };
             }
-
-
-
-            this.InicializarPlantilla(crearProyectoDto);
-            this.ImplementarPersonalizacionAsync(crearProyectoDto);
-            this.GenerarBD(crearProyectoDto);
-            this.GenerarProyectoPlantilla(crearProyectoDto);
-            this.LimpiezaProyecto(crearProyectoDto);
-
-
-
-            return dato;
         }
 
         private void InicializarPlantilla(CrearProyectoDto crearProyectoDto)
@@ -115,6 +136,10 @@ namespace tfg_backend.repositorios
                     Resultado = -1
                 };
             }
+            if(Directory.Exists(Path.Combine("data", eliminarProyectoDto.Usuario, eliminarProyectoDto.Nombre)))
+            {
+                Directory.Delete(Path.Combine("data", eliminarProyectoDto.Usuario, eliminarProyectoDto.Nombre), true);
+            }
 
             return new RItem<Proyecto>(eliminarProyectoDto);
         }
@@ -124,29 +149,32 @@ namespace tfg_backend.repositorios
             string rutaEnv = Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre, crearProyectoDto.Plantilla, ".env");
             using (StreamWriter sw = new StreamWriter(rutaEnv, true))
             {
+                sw.WriteLine("");
+                sw.WriteLine("--------------------Personalizacion--------------------");
+                sw.WriteLine("");
                 sw.WriteLine("Titulo=" + crearProyectoDto.Personalizacion.Titulo);
                 sw.WriteLine("Logo_Extension=" + crearProyectoDto.Personalizacion.Extension);
                 sw.WriteLine("Moneda=" + crearProyectoDto.Personalizacion.Moneda);
-                sw.WriteLine("Color_background=" + "'"+crearProyectoDto.Personalizacion.Color_backgound+ "'");
-                sw.WriteLine("Color_background_light=" + "'"+ crearProyectoDto.Personalizacion.Color_backgound_light+ "'");
-                sw.WriteLine("Color_background_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_backgound_dark+ "'");
-                sw.WriteLine("Color_items=" +  "'"+crearProyectoDto.Personalizacion.Color_items+ "'");
-                sw.WriteLine("Color_items_light=" + "'"+ crearProyectoDto.Personalizacion.Color_items_light+ "'");
-                sw.WriteLine("Color_items_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_items_dark+ "'");
-                sw.WriteLine("Color_texto=" + "'"+ crearProyectoDto.Personalizacion.Color_texto+ "'");
-                sw.WriteLine("Color_texto_light=" + "'"+ crearProyectoDto.Personalizacion.Color_texto_light+ "'");
-                sw.WriteLine("Color_texto_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_texto_dark+ "'");
-                sw.WriteLine("Color_boton=" + "'"+ crearProyectoDto.Personalizacion.Color_boton+ "'");
-                sw.WriteLine("Color_boton_light=" + "'"+ crearProyectoDto.Personalizacion.Color_boton_light+ "'");
-                sw.WriteLine("Color_boton_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_boton_dark+ "'");
-                sw.WriteLine("Color_header=" + "'"+crearProyectoDto.Personalizacion.Color_header+ "'");
-                sw.WriteLine("Color_header_light=" + "'"+ crearProyectoDto.Personalizacion.Color_header_light+ "'");
-                sw.WriteLine("Color_header_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_header_dark+ "'");
-                sw.WriteLine("Color_subHeader=" + "'"+ crearProyectoDto.Personalizacion.Color_subHeader+ "'");
-                sw.WriteLine("Color_subHeader_light=" + "'"+ crearProyectoDto.Personalizacion.Color_subHeader_light+ "'");
-                sw.WriteLine("Color_subHeader_dark=" + "'"+ crearProyectoDto.Personalizacion.Color_subHeader_dark+ "'");
+                sw.WriteLine("Color_background=" + "'" + crearProyectoDto.Personalizacion.Color_backgound + "'");
+                sw.WriteLine("Color_background_light=" + "'" + crearProyectoDto.Personalizacion.Color_backgound_light + "'");
+                sw.WriteLine("Color_background_dark=" + "'" + crearProyectoDto.Personalizacion.Color_backgound_dark + "'");
+                sw.WriteLine("Color_items=" + "'" + crearProyectoDto.Personalizacion.Color_items + "'");
+                sw.WriteLine("Color_items_light=" + "'" + crearProyectoDto.Personalizacion.Color_items_light + "'");
+                sw.WriteLine("Color_items_dark=" + "'" + crearProyectoDto.Personalizacion.Color_items_dark + "'");
+                sw.WriteLine("Color_texto=" + "'" + crearProyectoDto.Personalizacion.Color_texto + "'");
+                sw.WriteLine("Color_texto_light=" + "'" + crearProyectoDto.Personalizacion.Color_texto_light + "'");
+                sw.WriteLine("Color_texto_dark=" + "'" + crearProyectoDto.Personalizacion.Color_texto_dark + "'");
+                sw.WriteLine("Color_boton=" + "'" + crearProyectoDto.Personalizacion.Color_boton + "'");
+                sw.WriteLine("Color_boton_light=" + "'" + crearProyectoDto.Personalizacion.Color_boton_light + "'");
+                sw.WriteLine("Color_boton_dark=" + "'" + crearProyectoDto.Personalizacion.Color_boton_dark + "'");
+                sw.WriteLine("Color_header=" + "'" + crearProyectoDto.Personalizacion.Color_header + "'");
+                sw.WriteLine("Color_header_light=" + "'" + crearProyectoDto.Personalizacion.Color_header_light + "'");
+                sw.WriteLine("Color_header_dark=" + "'" + crearProyectoDto.Personalizacion.Color_header_dark + "'");
+                sw.WriteLine("Color_subHeader=" + "'" + crearProyectoDto.Personalizacion.Color_subHeader + "'");
+                sw.WriteLine("Color_subHeader_light=" + "'" + crearProyectoDto.Personalizacion.Color_subHeader_light + "'");
+                sw.WriteLine("Color_subHeader_dark=" + "'" + crearProyectoDto.Personalizacion.Color_subHeader_dark + "'");
             }
-   
+
             this.cargarFoto(crearProyectoDto);
 
 
@@ -167,7 +195,8 @@ namespace tfg_backend.repositorios
             File.WriteAllText(rutaArchivo, CategoriaJson);
         }
 
-        private async void cargarFoto(CrearProyectoDto crearProyectoDto){
+        private async void cargarFoto(CrearProyectoDto crearProyectoDto)
+        {
             var dataUriHeader = crearProyectoDto.Personalizacion.Logo.Split(',')[0];
             var base64Data = crearProyectoDto.Personalizacion.Logo.Split(',')[1];
             this.extensionLogo = ".jpg";
@@ -188,8 +217,8 @@ namespace tfg_backend.repositorios
             {
                 this.extensionLogo = ".webp";
             }
- 
-            var rutaCarpeta = Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre, crearProyectoDto.Plantilla, "plantila_tienda_frontend","src","assets","logos");
+
+            var rutaCarpeta = Path.Combine("data", crearProyectoDto.Usuario, crearProyectoDto.Nombre, crearProyectoDto.Plantilla, "plantila_tienda_frontend", "src", "assets", "logos");
             if (!Directory.Exists(rutaCarpeta))
             {
                 Directory.CreateDirectory(rutaCarpeta);
